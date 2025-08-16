@@ -1,0 +1,120 @@
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Detalles del usuario</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    </head>
+    <body style="font: Tahoma, sans-serif; background-color: #181818; color: whitesmoke">
+        <header class="d-flex justify-content-center py-3">
+            <div>
+            </div>
+        </header>
+        <div class="container"  style="background-color: activeborder; font-family: Tahoma, sans-serif">
+            <form style="padding-bottom: 10px">
+                <div>
+                    <fieldset disabled style="background-color: activeborder; color: whitesmoke">
+                        <legend><b>Datos generales</b></legend>
+                        <div class="row g-3">
+                            <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-3">
+                                <label for="disabledTextInput" class="form-label">Username</label>
+                                <input type="text" id="disabledUsername" class="form-control" placeholder ="Username" th:field="${usuario.Username}">
+                            </div>
+                            <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-3">
+                                <label for="disabledTextInput" class="form-label">Nombre</label>
+                                <input type="text" id="disabledNombre" class="form-control" placeholder ="Nombre" th:field="${usuario.Nombre}">
+                            </div>
+                            <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-3">
+                                <label for="disabledTextInput" class="form-label">Apellido paterno</label>
+                                <input type="text" id="disabledApellidoPaterno" class="form-control" placeholder ="ApellidoPaterno" th:field="${usuario.ApellidoPaterno}">
+                            </div>
+                            <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-3">
+                                <label for="disabledTextInput" class="form-label">Apellido materno</label>
+                                <input type="text" id="disabledApellidoMaterno" class="form-control" placeholder ="ApellidoMaterno" th:field="${usuario.ApellidoMaterno}">
+                            </div>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-3">
+                                <label for="disabledTextInput" class="form-label">Fecha de nacimiento (yyyy/MM/dd)</label>
+                                <input type="text" id="disabledFechaNacimiento" class="form-control" placeholder ="FechaNacimiento" th:field="${usuario.FechaNacimiento}">
+                            </div>
+                            <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-3">
+                                <label for="disabledTextInput" class="form-label">Sexo</label>
+                                <input type="text" id="disabledSexo" class="form-control" placeholder ="Sexo" th:field="${usuario.Sexo}">
+                            </div>
+                            <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-3">
+                                <label for="disabledTextInput" class="form-label">CURP</label>
+                                <input type="text" id="disabledCurp" class="form-control" placeholder ="Curp" th:field="${usuario.Curp}">
+                            </div>
+                            <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-3">
+                                <label for="disabledTextInput" class="form-label">Rol</label>
+                                <input type="text" id="disabledRol" class="form-control" placeholder ="Rol" th:field ="${usuario.rol.Nombre}">
+                            </div>
+                        </div>
+                        <hr class="my-4">
+                        <h4 class="mb-3"><b>Datos de contacto</b></h4>
+                        <div class="row g-3">
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-4">
+                                <label for="disabledTextInput" class="form-label">Email</label>
+                                <input type="text" id="disabledEmail" class="form-control" placeholder ="Email" th:field="${usuario.Email}">
+                            </div>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-4">
+                                <label for="disabledTextInput" class="form-label">Teléfono</label>
+                                <input type="text" id="disabledTelefono" class="form-control" placeholder ="Telefono" th:field="${usuario.Telefono}">
+                            </div>
+                            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-4">
+                                <label for="disabledTextInput" class="form-label">Celular</label>
+                                <input type="text" id="disabledCelular" class="form-control" placeholder ="Celular" th:field="${usuario.Celular}">
+                            </div>
+                        </div>
+                    </fieldset>
+                    </div>
+                <a th:href="|@{/usuario/formEditable?IdUsuario=}${usuario.idUsuario}|" class="btn btn-success mt-4 w-100 fw-bold" type="submit">Editar información <i class="bi bi-pencil-square"></i></a>
+                
+                
+                <div>
+                    <hr class="my-4">
+                    <h4 class="mb-3" style="margin-bottom: 0px"><b>Dirección</b></h4>
+                    <div style="display: flex; justify-content: center; align-items: center; padding-bottom: 10px">
+                        <a class="btn btn-success mt-2 col-6" th:href="|@{/usuario/formEditable?IdDireccion=}0&IdUsuario=${usuario.IdUsuario}|">Agregar dirección</a>
+                    </div>
+                    <div class="mb-3">
+                        <table class = "table" style="background-color: activeborder; color: whitesmoke">
+                            <thead>
+                                <tr class = "table-dark">
+                                    <th scope="col-xxl-1 col-xl-1 col-lg-1 col-md-1 col-sm-1 col-1" >#</th>
+                                    <th scope="col-xxl-1 col-xl-1 col-lg-1 col-md-1 col-sm-1 col-1" >Calle</th>
+                                    <th scope="col-xxl-1 col-xl-1 col-lg-1 col-md-1 col-sm-1 col-1">No. Int</th>
+                                    <th scope="col-xxl-1 col-xl-1 col-lg-1 col-md-1 col-sm-1 col-1" >No. Ext</th>
+                                    <th scope="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2" >Colonia</th>
+                                    <th scope="col-xxl-1 col-xl-1 col-lg-1 col-md-1 col-sm-1 col-1" >Código Postal</th>
+                                    <th scope="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2" >Municipio</th>
+                                    <th scope="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2" >Estado</th>
+                                    <th scope="col-xxl-1 col-xl-1 col-lg-1 col-md-1 col-sm-1 col-1" >País</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="direccion, iterStat : ${usuario.direccion}">
+                                    <td id="botonesTabla">
+                                        <a th:href="@{/usuario/action/{idUsuario}(idUsuario = ${usuario.IdUsuario})}" class="btn btn-success"><i class="bi bi-pencil-square"></i></a>
+                                        <a th:href="@{/usuario/action/{idUsuario}(idUsuario = ${usuario.IdUsuario})}" class="btn btn-danger"><i class="bi bi-trash3-fill"></i></a>
+                                    </td>
+                                    <td th:text="${direccion.Calle}"></td>
+                                    <td th:text="${direccion.NumeroExterior}"></td>
+                                    <td th:text="${direccion.NumeroInterior}"></td>
+                                    <td th:text="${direccion.Colonia.Nombre}"></td>
+                                    <td th:text="${direccion.Colonia.CodigoPostal}"></td>
+                                    <td th:text="${direccion.Colonia.Municipio.Nombre}"></td>
+                                    <td th:text="${direccion.Colonia.Municipio.Estado.Nombre}"></td>
+                                    <td th:text="${direccion.Colonia.Municipio.Estado.Pais.Nombre}"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>
