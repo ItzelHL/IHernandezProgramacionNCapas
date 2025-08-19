@@ -69,7 +69,8 @@ public class UsuarioDAOImplementation implements IUsuarioDAO
                     } else 
                     {
                         Usuario usuario = new Usuario();
-
+                        
+                        usuario.setImagen(resultSet.getString("ImagenUsuario"));
                         usuario.setIdUsuario(resultSet.getInt("IdUsuario"));
                         usuario.setUsername(resultSet.getString("Username"));
                         usuario.setNombre(resultSet.getString("NombreUsuario"));
@@ -140,6 +141,35 @@ public class UsuarioDAOImplementation implements IUsuarioDAO
         {
             jdbcTemplate.execute("CALL UsuarioGetById(?, ?)", (CallableStatementCallback<Boolean>) callableStatement -> {
                 callableStatement.registerOutParameter(1, java.sql.Types.REF_CURSOR);
+                callableStatement.setInt(2, idUsuario);
+                
+                callableStatement.execute();
+                ResultSet resultSet = (ResultSet) callableStatement.getObject(1);
+                
+                if(resultSet.next())
+                {
+                    Usuario usuario = new Usuario();
+                    
+                    usuario.setImagen(resultSet.getString("ImagenUsuario"));
+                    usuario.setIdUsuario(resultSet.getInt("IdUsuario"));
+                    usuario.setUsername(resultSet.getString("Username"));
+                    usuario.setNombre(resultSet.getString("NombreUsuario"));
+                    usuario.setApellidoPaterno(resultSet.getString("ApellidoPaterno"));
+                    usuario.setApellidoMaterno(resultSet.getString("ApellidoMaterno"));
+                    usuario.setFechaNacimiento(resultSet.getDate("FechaNacimiento"));
+                    usuario.setSexo(resultSet.getString("Sexo"));
+                    usuario.setCurp(resultSet.getString("Curp"));
+                    usuario.setEmail(resultSet.getString("Email"));
+                    usuario.setPassword(resultSet.getString("Password"));
+                    usuario.setTelefono(resultSet.getString("Telefono"));
+                    usuario.setCelular(resultSet.getString("Celular"));
+
+                    usuario.Rol = new Rol();
+                    usuario.Rol.setIdRol(resultSet.getInt("IdRol"));
+                    
+                    result.object = usuario;
+                }
+                result.correct = true;
                 return true;
             });
         } catch (Exception ex) 
@@ -237,31 +267,32 @@ public class UsuarioDAOImplementation implements IUsuarioDAO
         Result result = new Result();
         
         try {
-            result.correct = jdbcTemplate.execute("{CALL UsuarioDireccionAdd(?, ?, ?, ?, TO_DATE(?, 'MM/DD/YY'), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}", 
+            result.correct = jdbcTemplate.execute("{CALL UsuarioDireccionAdd(?, ?, ?, ?, ?, TO_DATE(?, 'MM/DD/YY'), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}", 
                     (CallableStatementCallback<Boolean>) callableStatement -> {
-                        callableStatement.setString(1, usuario.getUsername());
-                        callableStatement.setString(2, usuario.getNombre());
-                        callableStatement.setString(3, usuario.getApellidoPaterno());
-                        callableStatement.setString(4, usuario.getApellidoMaterno());
+                        callableStatement.setString(1, usuario.getImagen());
+                        callableStatement.setString(2, usuario.getUsername());
+                        callableStatement.setString(3, usuario.getNombre());
+                        callableStatement.setString(4, usuario.getApellidoPaterno());
+                        callableStatement.setString(5, usuario.getApellidoMaterno());
                         //Aqui van la conversión de util a sql
 //            Long fechNac = usuario.getFechaNacimiento().getTime();
 //            java.sql.Date sqlDate = new java.sql.Date(fechNac);
 //            callableStatement.setDate(4, sqlDate);
-                        callableStatement.setDate(5, new java.sql.Date(usuario.getFechaNacimiento().getTime()));
-                        callableStatement.setString(6, usuario.getSexo());
-                        callableStatement.setString(7, usuario.getCurp());
-                        callableStatement.setString(8, usuario.getEmail());
-                        callableStatement.setString(9, usuario.getPassword());
-                        callableStatement.setString(10, usuario.getTelefono());
-                        callableStatement.setString(11, usuario.getCelular());
+                        callableStatement.setDate(6, new java.sql.Date(usuario.getFechaNacimiento().getTime()));
+                        callableStatement.setString(7, usuario.getSexo());
+                        callableStatement.setString(8, usuario.getCurp());
+                        callableStatement.setString(9, usuario.getEmail());
+                        callableStatement.setString(10, usuario.getPassword());
+                        callableStatement.setString(11, usuario.getTelefono());
+                        callableStatement.setString(12, usuario.getCelular());
 
-                        callableStatement.setInt(12, usuario.Rol.getIdRol());
+                        callableStatement.setInt(13, usuario.Rol.getIdRol());
 
-                        callableStatement.setString(13, usuario.Direccion.get(0).getCalle());
-                        callableStatement.setString(14, usuario.Direccion.get(0).getNumeroExterior());
-                        callableStatement.setString(15, usuario.Direccion.get(0).getNumeroInterior());
+                        callableStatement.setString(14, usuario.Direccion.get(0).getCalle());
+                        callableStatement.setString(15, usuario.Direccion.get(0).getNumeroExterior());
+                        callableStatement.setString(16, usuario.Direccion.get(0).getNumeroInterior());
 
-                        callableStatement.setInt(16, usuario.Direccion.get(0).Colonia.getIdColonia());
+                        callableStatement.setInt(17, usuario.Direccion.get(0).Colonia.getIdColonia());
                         
                         int isCorrect = callableStatement.executeUpdate();
 

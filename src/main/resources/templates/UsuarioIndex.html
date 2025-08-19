@@ -19,7 +19,8 @@
                 <thead>
                     <tr class = "table table-dark" style="text-align: center">
                         <th scope="col-xxl-1 col-xl-1 col-lg-1 col-md-1 col-sm-1 col-1" >#</th>
-                        <th scope="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2" >Username</th>
+                        <th scope="col-xxl-1 col-xl-1 col-lg-1 col-md-1 col-sm-1 col-1" >Imagen</th>
+                        <th scope="col-xxl-1 col-xl-1 col-lg-1 col-md-1 col-sm-1 col-1" >Username</th>
                         <th scope="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2" >Nombre Completo</th>
                         <th scope="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2" >Datos personales</th>
                         <th scope="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2" >Contacto</th>
@@ -32,6 +33,9 @@
                         <td>
                             <a th:href="@{/usuario/action/{idUsuario}(idUsuario = ${usuario.IdUsuario})}" class="btn btn-success"><i class="bi bi-pencil-square"></i></a>
                             <a th:href="@{/usuario/action/{idUsuario}(idUsuario = ${usuario.IdUsuario})}" class="btn btn-danger"><i class="bi bi-trash3-fill"></i></a>
+                        </td>
+                        <td>
+                            <img style="max-height: 100px" th:src="|${(usuario.Imagen != null) ? 'data:image/jpeg;base64,' + usuario.Imagen : 'https://icones.pro/wp-content/uploads/2021/02/icone-utilisateur-vert.png'"/>
                         </td>
                         <td th:text ="${usuario.Username}"></td>
                         <td th:text="|${usuario.Nombre} ${usuario.ApellidoPaterno} ${usuario.ApellidoMaterno}|"></td>

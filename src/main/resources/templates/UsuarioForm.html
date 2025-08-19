@@ -25,12 +25,21 @@
             <h1 style="text-align: center"><b>Ingrese la información del nuevo usuario</b></h1>
         </header>
         <div class="container" style="font-family: Tahoma, sans-serif"> 
-            <form class="needs-validation mb-3" method="post" th:object="${Usuario}" th:action="@{/usuario/action/}">
+            <form class="needs-validation mb-3" method="post" th:object="${usuario}" th:action="@{/usuario/action/}" enctype="multipart/form-data">
+                
                 <input type="hidden" th:field="*{IdUsuario}">
                 <input type="hidden" th:field="*{Direccion[0].IdDireccion}">
+                
                 <div th:if="*{(IdUsuario == 0 && Direccion[0].IdDireccion == 0) || (IdUsuario > 0 && Direccion[0].IdDireccion == -1)}">
                     <hr class="my-4">
                     <h4 class="mb-3" style="padding-bottom: 10px">Datos generales</h4>
+                    <div class="row g-3 card p-3 w-100 h-100 d-flex flex-column align-items-center" style="background-color: activeborder">
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-4">
+                            <label for="imagenUsuario" class="form-label fw-bold">Imagen</label>
+                            <input type="file" id="imagenUsuario" class="form-control" name="imagenFile" required>
+                            <img id="previewImage" style="max-width: 100px; max-height: auto" class="rounded mx-auto d-block" src="https://icones.pro/wp-content/uploads/2021/02/icone-utilisateur-vert.png">
+                        </div>
+                    </div>
                     <div class="row g-3" style="background-color: activeborder">
                         <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-4 mb-2">
                             <label for="username" class="form-label">Username</label>
@@ -87,19 +96,19 @@
                     <div class="row g-3" style="background-color: activeborder">
                         <div class="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-2">
                             <label for="telefono" class="form-label">Telefono</label>
-                            <input type="tel" id="telefono" class="form-control" placeholder ="11-2222-3333" th:field="*{Telefono}" required>
+                            <input type="tel" id="telefono" class="form-control" placeholder ="1122223333" th:field="*{Telefono}" required>
                             <span class="text-danger" th:if="${#fields.hasErrors('Telefono')}" th:errors="*{Telefono}">Message error</span>
                         </div>
                         <div class="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-2">
                             <label for="celular" class="form-label">Celular</label>
-                            <input type="tel" id="celular" class="form-control" placeholder ="11-2222-3333" th:field="*{Celular}" required>
+                            <input type="tel" id="celular" class="form-control" placeholder ="1122223333" th:field="*{Celular}" required>
                             <span class="text-danger" th:if="${#fields.hasErrors('Celular')}" th:errors="*{Celular}">Message error</span>
                         </div>
                         <div class="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-2" data-bs-theme="dark">
                             <label for="nombreRol" class="form-label fw-bold">Nombre del rol:</label>
-                            <select id="nombreRol" class="form-select" aria-label="Selecciona una opción">
+                            <select id="nombreRol" class="form-select" aria-label="Selecciona una opción" th:field="*{rol.idRol}">
                                 <option value= "0" selected>Selecciona un rol</option>
-                                <option th:each="rol : ${roles}" th:text="${rol.nombre}" th:value="${rol.IdRol}" th:field="*{rol.idRol}">One</option>
+                                <option th:each="rol : ${roles}" th:text="${rol.nombre}" th:value="${rol.IdRol}">One</option>
                             </select>
                         </div>
                         <div class="row g-3" style="padding-bottom: 10px">
@@ -122,32 +131,32 @@
                     </div>
                 </div>
 
-                <div>
+                <div th:if="*{(IdUsuario == 0 && Direccion[0].IdDireccion == 0) || (IdUsuario > 0 && Direccion[0].IdDireccion == 0) || (IdUsuario > 0 && Direccion[0].IdDireccion > 0)}">
                     <hr class="my-4">
                     <h4 class="mb-3" style="padding-bottom: 10px">Dirección</h4>
                     <div class="row g-3" style="background-color: activeborder; padding-bottom: 10px">
                         <div class="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-2" data-bs-theme="dark">
                             <label for="paisddl" class="form-label fw-bold">Pais</label>
-                            <select id="paisddl" class="form-select" aria-label="Selecciona un pais">
+                            <select id="paisddl" class="form-select" aria-label="Selecciona un pais" th:field="*{Direccion[0].Colonia.Municipio.Estado.Pais.IdPais}">
                                 <option value= "0" selected>Selecciona un país</option>
                                 <option th:each="pais : ${paises}" th:value="${pais.IdPais}" th:text="${pais.Nombre}">One</option>
                             </select>
                         </div>
                         <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-3" data-bs-theme="dark">
                             <label for="estadoddl" class="form-label fw-bold">Estado</label>
-                            <select id="estadoddl" class="form-select" aria-label="Selecciona un estado">
+                            <select id="estadoddl" class="form-select" aria-label="Selecciona un estado" th:field="*{Direccion[0].Colonia.Municipio.Estado.IdEstado}">
                                 <option value= "0" selected>Selecciona un estado</option>
                             </select>
                         </div>
                         <div class="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-2" data-bs-theme="dark">
                             <label for="municipioddl" class="form-label fw-bold">Municipio</label>
-                            <select id="municipioddl" class="form-select" aria-label="Selecciona un municipio">
+                            <select id="municipioddl" class="form-select" aria-label="Selecciona un municipio" th:field="*{Direccion[0].Colonia.Municipio.IdMunicipio}">
                                 <option value= "0" selected>Selecciona un municipio</option>
                             </select>
                         </div>
                         <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-3" data-bs-theme="dark">
                             <label for="coloniaddl" class="form-label">Colonia</label>
-                            <select id="coloniaddl" class="form-select" aria-label="Selecciona una colonia">
+                            <select id="coloniaddl" class="form-select" aria-label="Selecciona una colonia" th:field="*{Direcciones[0].Colonia.IdColonia}">
                                 <option value= "0" selected>Selecciona un colonia</option>
                             </select>
                         </div>

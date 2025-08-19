@@ -6,9 +6,12 @@ import com.digis01.IHernandezProgramacionNCapas.DAO.MunicipioDAOImplementation;
 import com.digis01.IHernandezProgramacionNCapas.DAO.PaisDAOImplementation;
 import com.digis01.IHernandezProgramacionNCapas.DAO.RolDAOImplementation;
 import com.digis01.IHernandezProgramacionNCapas.DAO.UsuarioDAOImplementation;
+import com.digis01.IHernandezProgramacionNCapas.ML.Direccion;
 import com.digis01.IHernandezProgramacionNCapas.ML.Result;
 import com.digis01.IHernandezProgramacionNCapas.ML.Usuario;
 import jakarta.validation.Valid;
+import java.util.ArrayList;
+import java.util.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("usuario")
@@ -60,7 +64,7 @@ public class UsuarioController
             //        Result result = rolDAOImplementation.GetAll();
             model.addAttribute("paises", paisDAOImplementation.GetAllPais().objects);
             model.addAttribute("roles", rolDAOImplementation.GetAll().objects);
-            model.addAttribute("Usuario", new Usuario());
+            model.addAttribute("usuario", new Usuario());
 
             return "UsuarioForm";
         } else //usuario existe - usuarioDetail 
@@ -69,7 +73,7 @@ public class UsuarioController
 
             if (result.correct) 
             {
-                model.addAttribute("Usuario", result.object);
+                model.addAttribute("usuario", result.object);
             } else 
             {
                 return "Error";
@@ -85,14 +89,23 @@ public class UsuarioController
     {
         if (IdDireccion == null)  //Editar usuario - return UsuarioForm - usuarioGetById
         {
-            Result result = usuarioDAOImplementation.DireccionesByIdUsuario(IdUsuario);
-            if(result.correct)
+            Result result = usuarioDAOImplementation.GetById(IdUsuario);
+            if(result.correct && result.object != null)
             {
-                model.addAttribute("Usuario", result.object);
+                Usuario usuario = (Usuario) result.object;
+                if (usuario.getDireccion() == null) 
+                {
+                    usuario.setDireccion(new ArrayList<>());
+                    usuario.Direccion.add(new Direccion(-1));
+                }
+                
+                model.addAttribute("paises", paisDAOImplementation.GetAllPais().objects);
+                model.addAttribute("roles", rolDAOImplementation.GetAll().objects);
+                model.addAttribute("usuario", usuario);
             }
             else
             {
-                model.addAttribute("Usuario", null);
+                model.addAttribute("error", result.errorMessage);
             }
             return "UsuarioForm";
         } else if (IdDireccion == 0) //Agregar dirección
@@ -105,15 +118,34 @@ public class UsuarioController
     }
     
     @PostMapping("action")
-    public String Add(@Valid @ModelAttribute("usuario") Usuario usuario, BindingResult bindingResult, Model model)
+    public String Add(@Valid @ModelAttribute("usuario") Usuario usuario, 
+                                BindingResult bindingResult, 
+                                Model model, @RequestParam("imagenFile") MultipartFile imagen)
     {
-        
         if (bindingResult.hasErrors())
         {
             model.addAttribute("usuario", usuario);
             return "UsuarioForm";
         }
         else{
+            if(imagen != null)
+            {
+                String nombre = imagen.getOriginalFilename();
+                String extension = nombre.split("\\.")[1];
+                if (extension.equals("jpg") || extension.equals("jpeg") || extension.equals("png")) 
+                {
+                    try 
+                    {
+                        byte[] bytes = imagen.getBytes();
+                        String base64Image = Base64.getEncoder().encodeToString(bytes);
+                        usuario.setImagen(base64Image);
+                    } catch (Exception ex) 
+                    {
+                        System.out.println("Solo se permiten archivos .jpg, .jpeg, .png");
+                    }
+                }
+            }
+            
             Result result = usuarioDAOImplementation.Add(usuario);
             return "redirect:/usuario";
         }

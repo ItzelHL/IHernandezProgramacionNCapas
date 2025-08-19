@@ -61,6 +61,8 @@ public class Usuario
 //    @NotEmpty(message = "Información necesaria")
     public List<Direccion> Direccion;
     
+    private String Imagen;
+    
     public Usuario(){}
     
     public Usuario(int idUsuario, String username, String nombre, String apellidoPaterno, String apellidoMaterno, String email, 
@@ -205,4 +207,18 @@ public class Usuario
     {
         return Direccion;
     }
+
+    public void setImagen(String imagen) 
+    {
+        this.Imagen = imagen;
+    }
+    public String getImagen() 
+    {
+        return Imagen;
+    }
+
+    
+    
+    
+    
 }

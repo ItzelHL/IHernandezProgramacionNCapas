@@ -21,6 +21,10 @@ public class Direccion {
 
     public Direccion(){}
     
+    public Direccion( int idDireccion){
+        this.IdDireccion = idDireccion;
+    }
+    
     public Direccion(int idDireccion, String calle, String numeroInterior, String numeroExterior) 
     {
         this.IdDireccion = idDireccion;
