@@ -150,8 +150,8 @@ public class UsuarioDAOImplementation implements IUsuarioDAO
                 {
                     Usuario usuario = new Usuario();
                     
-                    usuario.setImagen(resultSet.getString("ImagenUsuario"));
                     usuario.setIdUsuario(resultSet.getInt("IdUsuario"));
+                    usuario.setImagen(resultSet.getString("ImagenUsuario"));
                     usuario.setUsername(resultSet.getString("Username"));
                     usuario.setNombre(resultSet.getString("NombreUsuario"));
                     usuario.setApellidoPaterno(resultSet.getString("ApellidoPaterno"));
@@ -198,6 +198,7 @@ public class UsuarioDAOImplementation implements IUsuarioDAO
                     Usuario usuario = new Usuario();
 
                     usuario.setIdUsuario(resultSet.getInt("IdUsuario"));
+                    usuario.setImagen(resultSet.getString("ImagenUsuario"));
                     usuario.setUsername(resultSet.getString("Username"));
                     usuario.setNombre(resultSet.getString("NombreUsuario"));
                     usuario.setApellidoPaterno(resultSet.getString("ApellidoPaterno"));
@@ -267,7 +268,7 @@ public class UsuarioDAOImplementation implements IUsuarioDAO
         Result result = new Result();
         
         try {
-            result.correct = jdbcTemplate.execute("{CALL UsuarioDireccionAdd(?, ?, ?, ?, ?, TO_DATE(?, 'MM/DD/YY'), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}", 
+            result.correct = jdbcTemplate.execute("{CALL UsuarioDireccionAdd(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}", 
                     (CallableStatementCallback<Boolean>) callableStatement -> {
                         callableStatement.setString(1, usuario.getImagen());
                         callableStatement.setString(2, usuario.getUsername());

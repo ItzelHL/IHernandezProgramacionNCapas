@@ -40,7 +40,7 @@ public class Usuario
     private String Password;
     
 //    @Past
-//    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date FechaNacimiento;
     
 //    @NotEmpty(message = "Información necesaria")
@@ -65,9 +65,10 @@ public class Usuario
     
     public Usuario(){}
     
-    public Usuario(int idUsuario, String username, String nombre, String apellidoPaterno, String apellidoMaterno, String email, 
+    public Usuario(String imagen, int idUsuario, String username, String nombre, String apellidoPaterno, String apellidoMaterno, String email, 
             String password, Date fechaNacimiento, String sexo, String telefono, String celular, String curp)
     {
+        this.Imagen = imagen;
         this.IdUsuario = idUsuario;
         this.Username = username;
         this.Nombre = nombre;
@@ -198,15 +199,16 @@ public class Usuario
     {
         return Rol;
     }
-   
-    public void setDireccion(List<Direccion> direccion)
-    {
-        this.Direccion = direccion;
-    }
-    public List<Direccion> getDireccion() 
-    {
+
+    public List<Direccion> getDireccion() {
         return Direccion;
     }
+
+    public void setDireccion(List<Direccion> direccion) {
+        this.Direccion = direccion;
+    }
+   
+   
 
     public void setImagen(String imagen) 
     {

@@ -25,41 +25,37 @@
             <h1 style="text-align: center"><b>Ingrese la información del nuevo usuario</b></h1>
         </header>
         <div class="container" style="font-family: Tahoma, sans-serif"> 
-            <form class="needs-validation mb-3" method="post" th:object="${usuario}" th:action="@{/usuario/action/}" enctype="multipart/form-data">
-                
+            <form id="userForm" method="post" th:object="${usuario}" th:action="@{/usuario/add}" enctype="multipart/form-data">
+
                 <input type="hidden" th:field="*{IdUsuario}">
                 <input type="hidden" th:field="*{Direccion[0].IdDireccion}">
-                
+
                 <div th:if="*{(IdUsuario == 0 && Direccion[0].IdDireccion == 0) || (IdUsuario > 0 && Direccion[0].IdDireccion == -1)}">
                     <hr class="my-4">
                     <h4 class="mb-3" style="padding-bottom: 10px">Datos generales</h4>
-                    <div class="row g-3 card p-3 w-100 h-100 d-flex flex-column align-items-center" style="background-color: activeborder">
-                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-4">
-                            <label for="imagenUsuario" class="form-label fw-bold">Imagen</label>
-                            <input type="file" id="imagenUsuario" class="form-control" name="imagenFile" required>
-                            <img id="previewImage" style="max-width: 100px; max-height: auto" class="rounded mx-auto d-block" src="https://icones.pro/wp-content/uploads/2021/02/icone-utilisateur-vert.png">
+                    <div class="row g-3" style="display: flex; justify-content: center; align-items: center; background-color: activeborder">
+                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-4" style="align-items: center">
+                            <input type="file" id="imagenUsuario" class="form-control" name="imagenFile" required><img id="previewImage" style="max-width: 200px; max-height: auto" class="rounded mx-auto d-block" th:field="*{Imagen}" th:src="|${(usuario.Imagen != null) ? 'data:image/*;base64,' + usuario.Imagen : 'https://tlconnect.teamlease.com/Images/Profile/default.jpg'}|">
                         </div>
                     </div>
                     <div class="row g-3" style="background-color: activeborder">
-                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-4 mb-2">
+                        <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-3 mb-2">
                             <label for="username" class="form-label">Username</label>
                             <input type="text" id="username" class="form-control" placeholder ="Username" th:field="*{Username}" onkeyup="SoloLetras(event, this)" required>
                             <!--<span class="error-msg" id="error-msg" style="color: red"></span>-->
                             <span class="text-danger" th:if="${#fields.hasErrors('Username')}" th:errors="*{Username}">Message error</span>
                         </div>
-                    </div>
-                    <div class="row g-3" style="background-color: activeborder">
-                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-4 mb-3">
+                        <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-3">
                             <label for="nombreUsuario" class="form-label">Nombre</label>
                             <input type="text" id="nombreUsuario" class="form-control" placeholder ="Nombre"  th:field="*{Nombre}" required>
                             <span class="text-danger" th:if="${#fields.hasErrors('Nombre')}" th:errors="*{Nombre}">Message error</span>
                         </div>
-                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-4">
+                        <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-3">
                             <label for="apellidoPaterno" class="form-label">Apellido paterno</label>
                             <input type="text" id="apellidoPaterno" class="form-control" placeholder ="Apellido paterno"  th:field="*{ApellidoPaterno}" required>
                             <span class="text-danger" th:if="${#fields.hasErrors('ApellidoPaterno')}" th:errors="*{ApellidoPaterno}">Message error</span>
                         </div>
-                        <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-4">
+                        <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-3">
                             <label for="apellidoMaterno" class="form-label">Apellido materno</label>
                             <input type="text" id="apellidoMaterno" class="form-control" placeholder ="Apellido materno"  th:field="*{ApellidoMaterno}" required>
                             <span class="text-danger" th:if="${#fields.hasErrors('ApellidoMaterno')}" th:errors="*{ApellidoMaterno}">Message error</span>
@@ -68,7 +64,7 @@
                     <div class="row g-3" style="background-color: activeborder; padding-bottom: 10px">
                         <div class="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-2">
                             <label for="fechaNacimiento" class="form-label">Fecha de nacimiento</label>
-                            <input type="date" id="fechaNacimiento" class="form-control" placeholder ="" th:field="*{FechaNacimiento}" required>
+                            <input type="date" id="fechaNacimiento" class="form-control" th:field="*{FechaNacimiento}" required>
                             <span class="text-danger" th:if="${#fields.hasErrors('FechaNacimiento')}" th:errors="*{FechaNacimiento}">Message error</span>
                         </div>
                         <div class="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-2">
@@ -119,7 +115,7 @@
                             </div>
                             <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-4">
                                 <label for="password" class="form-label">Password</label>
-                                <input type="password" id="password" class="form-control" minlength="8" placeholder ="Contraseña" th:field="*{Password}" required>
+                                <input type="password" id="password" class="form-control" minlength="8" placeholder ="Contraseña" required>
                                 <span class="text-danger" th:if="${#fields.hasErrors('Password')}" th:errors="*{Password}">Message error</span>
                             </div>
                             <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-4">
@@ -156,7 +152,7 @@
                         </div>
                         <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-3" data-bs-theme="dark">
                             <label for="coloniaddl" class="form-label">Colonia</label>
-                            <select id="coloniaddl" class="form-select" aria-label="Selecciona una colonia" th:field="*{Direcciones[0].Colonia.IdColonia}">
+                            <select id="coloniaddl" class="form-select" aria-label="Selecciona una colonia" th:field="*{Direccion[0].Colonia.IdColonia}">
                                 <option value= "0" selected>Selecciona un colonia</option>
                             </select>
                         </div>
@@ -181,7 +177,7 @@
                         </div>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-success mt-4 w-100 fw-bold">Agregar</button>
+                <button type="submit" class="btn btn-success mt-4 w-100 fw-bold" onclick="validarPasswords()">Agregar</button>
             </form>
         </div>
         <script>
@@ -202,6 +198,22 @@
 //                    $(input).siblings(".error-msg").text("Esto no es una username");
 //                }
 //            }
+
+            function validarPasswords()
+            {
+                var pass = document.getElementById("password").value;
+                var confirmPass = document.getElementById("confirmPassword").value;
+                
+                if (pass != confirmPass)
+                {
+                    alert("Las contraseñas no coinciden.");
+                }
+                else
+                {
+                    document.getElementById("userForm").submit();
+                }
+            }
+            
             $(document).ready(function ()
             {
 //                $.ajax({

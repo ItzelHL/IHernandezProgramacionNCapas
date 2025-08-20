@@ -17,39 +17,44 @@
                 <div>
                     <fieldset disabled style="background-color: activeborder; color: whitesmoke">
                         <legend><b>Datos generales</b></legend>
+                        <div class="row g-3" style="display: flex; justify-content: center; align-items: center;">
+                            <div style="display: flex; justify-content: center; align-items: center;">
+                                <img id="imagenUsuario" style="max-height: 200px; max-width: auto" th:src="|${(usuario.Imagen != null) ? 'data:image/*;base64,' + usuario.Imagen : 'https://tlconnect.teamlease.com/Images/Profile/default.jpg'}|"/>
+                            </div>
+                        </div>
                         <div class="row g-3">
-                            <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-3">
-                                <label for="disabledTextInput" class="form-label">Username</label>
+                            <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-3 mb-2">
+                                <label for="disabledUsername" class="form-label">Username</label>
                                 <input type="text" id="disabledUsername" class="form-control" placeholder ="Username" th:field="${usuario.Username}">
                             </div>
                             <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-3">
-                                <label for="disabledTextInput" class="form-label">Nombre</label>
+                                <label for="disabledNombre" class="form-label">Nombre</label>
                                 <input type="text" id="disabledNombre" class="form-control" placeholder ="Nombre" th:field="${usuario.Nombre}">
                             </div>
                             <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-3">
-                                <label for="disabledTextInput" class="form-label">Apellido paterno</label>
+                                <label for="disabledApellidoPaterno" class="form-label">Apellido paterno</label>
                                 <input type="text" id="disabledApellidoPaterno" class="form-control" placeholder ="ApellidoPaterno" th:field="${usuario.ApellidoPaterno}">
                             </div>
                             <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-3">
-                                <label for="disabledTextInput" class="form-label">Apellido materno</label>
+                                <label for="disabledApellidoMaterno" class="form-label">Apellido materno</label>
                                 <input type="text" id="disabledApellidoMaterno" class="form-control" placeholder ="ApellidoMaterno" th:field="${usuario.ApellidoMaterno}">
                             </div>
                         </div>
                         <div class="row g-3">
                             <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-3">
-                                <label for="disabledTextInput" class="form-label">Fecha de nacimiento (yyyy/MM/dd)</label>
+                                <label for="disabledFechaNacimiento" class="form-label">Fecha de nacimiento (yyyy/MM/dd)</label>
                                 <input type="text" id="disabledFechaNacimiento" class="form-control" placeholder ="FechaNacimiento" th:field="${usuario.FechaNacimiento}">
                             </div>
                             <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-3">
-                                <label for="disabledTextInput" class="form-label">Sexo</label>
+                                <label for="disabledSexo" class="form-label">Sexo</label>
                                 <input type="text" id="disabledSexo" class="form-control" placeholder ="Sexo" th:field="${usuario.Sexo}">
                             </div>
                             <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-3">
-                                <label for="disabledTextInput" class="form-label">CURP</label>
+                                <label for="disabledCurp" class="form-label">CURP</label>
                                 <input type="text" id="disabledCurp" class="form-control" placeholder ="Curp" th:field="${usuario.Curp}">
                             </div>
                             <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-3">
-                                <label for="disabledTextInput" class="form-label">Rol</label>
+                                <label for="disabledRol" class="form-label">Rol</label>
                                 <input type="text" id="disabledRol" class="form-control" placeholder ="Rol" th:field ="${usuario.rol.Nombre}">
                             </div>
                         </div>
@@ -57,29 +62,28 @@
                         <h4 class="mb-3"><b>Datos de contacto</b></h4>
                         <div class="row g-3">
                             <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-4">
-                                <label for="disabledTextInput" class="form-label">Email</label>
+                                <label for="disabledEmail" class="form-label">Email</label>
                                 <input type="text" id="disabledEmail" class="form-control" placeholder ="Email" th:field="${usuario.Email}">
                             </div>
                             <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-4">
-                                <label for="disabledTextInput" class="form-label">Teléfono</label>
+                                <label for="disabledTelefono" class="form-label">Teléfono</label>
                                 <input type="text" id="disabledTelefono" class="form-control" placeholder ="Telefono" th:field="${usuario.Telefono}">
                             </div>
                             <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-4">
-                                <label for="disabledTextInput" class="form-label">Celular</label>
+                                <label for="disabledCelular" class="form-label">Celular</label>
                                 <input type="text" id="disabledCelular" class="form-control" placeholder ="Celular" th:field="${usuario.Celular}">
                             </div>
                         </div>
                     </fieldset>
-                    </div>
-                <a th:href="|@{/usuario/formEditable?IdUsuario=}${usuario.IdUsuario}|" class="btn btn-success mt-4 w-100 fw-bold" type="submit">Editar información <i class="bi bi-pencil-square"></i></a>
-                
-                
+                </div>
+                <div style="display: flex; justify-content: center; align-items: center;">
+                    <a th:href="|@{/usuario/formEditable?IdUsuario=}${usuario.IdUsuario}|" class="btn btn-success mt-2 col-6 fw-bold" type="submit">Editar información <i class="bi bi-pencil-square"></i></a>
+                </div>
+
+
                 <div>
                     <hr class="my-4">
                     <h4 class="mb-3" style="margin-bottom: 0px"><b>Dirección</b></h4>
-                    <div style="display: flex; justify-content: center; align-items: center; padding-bottom: 10px">
-                        <a class="btn btn-success mt-2 col-6" th:href="|@{/usuario/formEditable?IdDireccion=}0&IdUsuario=${usuario.IdUsuario}|">Agregar dirección</a>
-                    </div>
                     <div class="mb-3">
                         <table class = "table" style="background-color: activeborder; color: whitesmoke">
                             <thead>
@@ -112,6 +116,9 @@
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+                    <div style="display: flex; justify-content: center; align-items: center; padding-bottom: 10px">
+                        <a th:href="|@{/usuario/formEditable?IdDireccion=}0&IdUsuario=${usuario.IdUsuario}|" class="btn btn-success mt-2 col-6 fw-bold" type="submit">Agregar dirección <i class="bi bi-building-add"></i></a>
                     </div>
                 </div>
             </form>

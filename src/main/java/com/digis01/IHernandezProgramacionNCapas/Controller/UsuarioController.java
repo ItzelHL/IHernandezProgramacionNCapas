@@ -64,7 +64,8 @@ public class UsuarioController
             //        Result result = rolDAOImplementation.GetAll();
             model.addAttribute("paises", paisDAOImplementation.GetAllPais().objects);
             model.addAttribute("roles", rolDAOImplementation.GetAll().objects);
-            model.addAttribute("usuario", new Usuario());
+            Usuario usuario = new Usuario();
+            model.addAttribute("usuario", usuario);
 
             return "UsuarioForm";
         } else //usuario existe - usuarioDetail 
@@ -79,6 +80,42 @@ public class UsuarioController
                 return "Error";
             }
             return "UsuarioDetail";
+        }
+    }
+    
+    @PostMapping("add")
+    public String Add(@Valid @ModelAttribute("usuario") Usuario usuario, 
+                                BindingResult bindingResult, 
+                                Model model, 
+                                @RequestParam("imagenFile") MultipartFile imagen)
+    {
+        if (bindingResult.hasErrors())
+        {
+            model.addAttribute("paises", paisDAOImplementation.GetAllPais().objects);
+            model.addAttribute("roles", rolDAOImplementation.GetAll().objects);
+            model.addAttribute("usuario", usuarioDAOImplementation.Add(usuario));
+            return "UsuarioForm";
+        }
+        else{
+            if(imagen != null)
+            {
+                String nombre = imagen.getOriginalFilename();
+                String extension = nombre.split("\\.")[1];
+                if (extension.equals("jpg") || extension.equals("jpeg") || extension.equals("png")) 
+                {
+                    try 
+                    {
+                        byte[] bytes = imagen.getBytes();
+                        String base64Image = Base64.getEncoder().encodeToString(bytes);
+                        usuario.setImagen(base64Image);
+                    } catch (Exception ex) 
+                    {
+                        System.out.println("Solo se permiten archivos .jpg, .jpeg, .png");
+                    }
+                }
+            }
+            Result result = usuarioDAOImplementation.Add(usuario);
+            return "redirect:/usuario";
         }
     }
     
@@ -117,38 +154,21 @@ public class UsuarioController
         return "";
     }
     
-    @PostMapping("action")
-    public String Add(@Valid @ModelAttribute("usuario") Usuario usuario, 
-                                BindingResult bindingResult, 
-                                Model model, @RequestParam("imagenFile") MultipartFile imagen)
+    @PostMapping("Update")
+    public String Update(@Valid Usuario usuario,
+                                        BindingResult bindingResult,
+                                        Model model)
     {
-        if (bindingResult.hasErrors())
+        if(bindingResult.hasErrors())
         {
+            model.addAttribute("paises", paisDAOImplementation.GetAllPais().objects);
+            model.addAttribute("roles", rolDAOImplementation.GetAll().objects);
             model.addAttribute("usuario", usuario);
-            return "UsuarioForm";
-        }
-        else{
-            if(imagen != null)
-            {
-                String nombre = imagen.getOriginalFilename();
-                String extension = nombre.split("\\.")[1];
-                if (extension.equals("jpg") || extension.equals("jpeg") || extension.equals("png")) 
-                {
-                    try 
-                    {
-                        byte[] bytes = imagen.getBytes();
-                        String base64Image = Base64.getEncoder().encodeToString(bytes);
-                        usuario.setImagen(base64Image);
-                    } catch (Exception ex) 
-                    {
-                        System.out.println("Solo se permiten archivos .jpg, .jpeg, .png");
-                    }
-                }
-            }
             
-            Result result = usuarioDAOImplementation.Add(usuario);
-            return "redirect:/usuario";
+            return "UsuarioDetail";
         }
+        usuarioDAOImplementation.UpdateUsuario(usuario);
+        return "redirect:/action/{IdUsuario}";
     }
     
 //    @GetMapping("getPaises")

@@ -10,8 +10,8 @@
     </head>
     <body style="background-color: #181818">
         <header class="d-flex justify-content-center py-3">
-            <div>
-                <a class="btn btn-success mt-4 w-100 fw-bold" style="font: Tahoma, sans-serif; text-align: center; padding: 15px 32px; color: white; background-color:  #04AA6D" th:href="@{/usuario/action/{IdUsuario}(IdUsuario=0)}" aria-current="page">Agregar usuario</a>
+            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4" style="display: flex; justify-content: center; align-items: center; padding-bottom: 10px">
+                <a th:href="@{/usuario/action/{IdUsuario}(IdUsuario=0)}" class="btn btn-success mt-4 w-100 fw-bold" aria-current="page">Agregar usuario <i class="bi bi-person-add"></i></a>
             </div>
         </header>
         <div class = "container" style="font-family: Tahoma, sans-serif">
@@ -35,7 +35,8 @@
                             <a th:href="@{/usuario/action/{idUsuario}(idUsuario = ${usuario.IdUsuario})}" class="btn btn-danger"><i class="bi bi-trash3-fill"></i></a>
                         </td>
                         <td>
-                            <img style="max-height: 100px" th:src="|${(usuario.Imagen != null) ? 'data:image/jpeg;base64,' + usuario.Imagen : 'https://icones.pro/wp-content/uploads/2021/02/icone-utilisateur-vert.png'"/>
+<!--                            <span th:text="|${(usuario.Imagen != null) ? 'Tengo imagen' : 'No tengo imagen'}|"></span>-->
+                            <img id="imagenUsuario" style="max-height: 80px; max-width: auto" th:src="|${(usuario.Imagen != null) ? 'data:image/*;base64,' + usuario.Imagen : 'https://tlconnect.teamlease.com/Images/Profile/default.jpg'}|"/>
                         </td>
                         <td th:text ="${usuario.Username}"></td>
                         <td th:text="|${usuario.Nombre} ${usuario.ApellidoPaterno} ${usuario.ApellidoMaterno}|"></td>

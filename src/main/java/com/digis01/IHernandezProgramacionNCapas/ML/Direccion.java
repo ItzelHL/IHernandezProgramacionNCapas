@@ -33,40 +33,36 @@ public class Direccion {
         this.NumeroExterior = numeroExterior;
     }
 
-    public void setIdDireccion(int idDireccion) 
-    {
-        this.IdDireccion = idDireccion;
-    }
-    public int getIdDireccion() 
-    {
+    public int getIdDireccion() {
         return IdDireccion;
     }
 
-    public void setCalle(String calle) 
-    {
-        this.Calle = calle;
+    public void setIdDireccion(int idDireccion) {
+        this.IdDireccion = idDireccion;
     }
-    public String getCalle() 
-    {
+
+    public String getCalle() {
         return Calle;
     }
 
-    public void setNumeroInterior(String numeroInterior) 
-    {
-        this.NumeroInterior = numeroInterior;
+    public void setCalle(String calle) {
+        this.Calle = calle;
     }
-    public String getNumeroInterior() 
-    {
+
+    public String getNumeroInterior() {
         return NumeroInterior;
     }
-    
-    public void setNumeroExterior(String numeroExterior) 
-    {
-        this.NumeroExterior = numeroExterior;
+
+    public void setNumeroInterior(String numeroInterior) {
+        this.NumeroInterior = numeroInterior;
     }
-    public String getNumeroExterior() 
-    {
+
+    public String getNumeroExterior() {
         return NumeroExterior;
+    }
+
+    public void setNumeroExterior(String numeroExterior) {
+        this.NumeroExterior = numeroExterior;
     }
 
     public void setColonia(Colonia colonia) 

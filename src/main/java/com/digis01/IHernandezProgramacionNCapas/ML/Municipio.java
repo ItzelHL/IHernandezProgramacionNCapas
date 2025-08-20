@@ -30,4 +30,14 @@ public class Municipio {
     {
         return Nombre;
     }
+
+    public Estado getEstado() {
+        return Estado;
+    }
+
+    public void setEstado(Estado estado) {
+        this.Estado = estado;
+    }
+    
+    
 }
