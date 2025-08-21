@@ -1,20 +1,12 @@
-<html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <title>Usuario - Index</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-        <link >
-    </head>
-    <body style="background-color: #181818">
-        <header class="d-flex justify-content-center py-3">
-            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4" style="display: flex; justify-content: center; align-items: center; padding-bottom: 10px">
-                <a th:href="@{/usuario/action/{IdUsuario}(IdUsuario=0)}" class="btn btn-success mt-4 w-100 fw-bold" aria-current="page">Agregar usuario <i class="bi bi-person-add"></i></a>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+    <body layout:fragment="body" style="background-color: #181818;">
+        <div class = "container" style="font-family: Tahoma, sans-serif; ">
+            <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4" style="align-items: center; padding-bottom: 10px">
+                <a th:href="@{/usuario/action/{IdUsuario}(IdUsuario=0)}" class="btn btn-success mt-4 w-100 fw-bold" style="justify-content: center; align-items: center">Agregar usuario <i class="bi bi-person-add"></i></a>
             </div>
-        </header>
-        <div class = "container" style="font-family: Tahoma, sans-serif">
             <table class = "table table-hover table-striped-columns" style="overflow-x: auto"> 
                 <thead>
                     <tr class = "table table-dark" style="text-align: center">
@@ -35,7 +27,7 @@
                             <a th:href="@{/usuario/action/{idUsuario}(idUsuario = ${usuario.IdUsuario})}" class="btn btn-danger"><i class="bi bi-trash3-fill"></i></a>
                         </td>
                         <td>
-<!--                            <span th:text="|${(usuario.Imagen != null) ? 'Tengo imagen' : 'No tengo imagen'}|"></span>-->
+                            <!--                            <span th:text="|${(usuario.Imagen != null) ? 'Tengo imagen' : 'No tengo imagen'}|"></span>-->
                             <img id="imagenUsuario" style="max-height: 80px; max-width: auto" th:src="|${(usuario.Imagen != null) ? 'data:image/*;base64,' + usuario.Imagen : 'https://tlconnect.teamlease.com/Images/Profile/default.jpg'}|"/>
                         </td>
                         <td th:text ="${usuario.Username}"></td>
