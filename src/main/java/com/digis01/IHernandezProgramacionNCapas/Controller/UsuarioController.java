@@ -12,17 +12,22 @@ import com.digis01.IHernandezProgramacionNCapas.ML.ErrorCM;
 import com.digis01.IHernandezProgramacionNCapas.ML.Result;
 import com.digis01.IHernandezProgramacionNCapas.ML.Rol;
 import com.digis01.IHernandezProgramacionNCapas.ML.Usuario;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -70,7 +75,7 @@ public class UsuarioController {
         return "UsuarioIndex";
     }
 
-    @GetMapping("/action/{IdUsuario}") // localhost:8080/usuario/usuarioDetail/{idUsuario}
+    @GetMapping("/action/{IdUsuario}") // localhost:8080/usuario/action/{idUsuario}
     public String Add(Model model, @PathVariable("IdUsuario") int IdUsuario) {
         if (IdUsuario == 0) //usuario no existe - usuarioDireccionAdd
         {
@@ -94,7 +99,7 @@ public class UsuarioController {
         }
     }
 
-    @PostMapping("add")
+    @PostMapping("add") // localhost:8080/usuario/add
     public String Add(@Valid @ModelAttribute("usuario") Usuario usuario,
             BindingResult bindingResult,
             Model model,
@@ -123,7 +128,7 @@ public class UsuarioController {
         }
     }
 
-    @GetMapping("formEditable")
+    @GetMapping("formEditable") // localhost:8080/usuario/formEditable
     public String FormEditable(@RequestParam int IdUsuario,
             @RequestParam(required = false) Integer IdDireccion,
             Model model) {
@@ -152,7 +157,7 @@ public class UsuarioController {
         return "";
     }
 
-    @PostMapping("Update")
+    @PostMapping("update") // localhost:8080/usuario/update
     public String Update(@Valid Usuario usuario,
             BindingResult bindingResult,
             Model model) {
@@ -167,34 +172,51 @@ public class UsuarioController {
         return "redirect:/action/{IdUsuario}";
     }
 
-    @GetMapping("cargaMasiva")
+    @GetMapping("cargaMasiva") // localhost:8080/usuario/cargaMasiva
     public String CargaMasiva() {
         return "CargaMasiva";
     }
 
-    @PostMapping("cargaMasiva")
-    public String CargaMasiva(@RequestParam("archivo") MultipartFile file, Model model) {
+    @PostMapping("cargaMasiva") // localhost:8080/usuario/cargaMasiva
+    public String CargaMasiva(@RequestParam("archivo") MultipartFile file, Model model, HttpSession session) {
+        String root = System.getProperty("user.dir");
+        String rutaArchivo = "/src/main/resources/archivos/";
+        String fechaSubida = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmSS"));
+        String rutaFinal = root + rutaArchivo + fechaSubida + file.getOriginalFilename();
+        
+        try 
+        {
+            file.transferTo(new File(rutaFinal));
+        } catch (Exception ex) 
+        {
+            System.out.println(ex.getLocalizedMessage());
+        }
+        
         if (file.getOriginalFilename().split("\\.")[1].equals("txt")) //txt
         {
-            List<Usuario> usuarios = ProcesarTXT(file);
-            List<ErrorCM> errores = ValidarDatos(usuarios);
-
-            if (errores.isEmpty()) {
-                model.addAttribute("listaErrores", errores);
-                model.addAttribute("archivoCorrecto", true);
-            } else {
-                model.addAttribute("listaErrores", errores);
-                model.addAttribute("archivoCorrecto", false);
-            }
-        } else // excel
-        {
-            List<Usuario> usuarios = ProcesarExcel(file);
+            List<Usuario> usuarios = ProcesarTXT(new File(rutaFinal));
             List<ErrorCM> errores = ValidarDatos(usuarios);
 
             if (errores.isEmpty()) 
             {
                 model.addAttribute("listaErrores", errores);
                 model.addAttribute("archivoCorrecto", true);
+                session.setAttribute("path", rutaFinal);
+            } else 
+            {
+                model.addAttribute("listaErrores", errores);
+                model.addAttribute("archivoCorrecto", false);
+            }
+        } else // excel
+        {
+            List<Usuario> usuarios = ProcesarExcel(new File(rutaFinal));
+            List<ErrorCM> errores = ValidarDatos(usuarios);
+
+            if (errores.isEmpty()) 
+            {
+                model.addAttribute("listaErrores", errores);
+                model.addAttribute("archivoCorrecto", true);
+                session.setAttribute("path", rutaFinal);
             } else 
             {
                 model.addAttribute("listaErrores", errores);
@@ -203,12 +225,41 @@ public class UsuarioController {
         }
         return "CargaMasiva";
     }
+    
+    @GetMapping("cargaMasiva/procesar") // localhost:8080/usuario/cargaMasiva/procesar
+    public String CargaMasiva(HttpSession session)
+    {
+        try 
+        {
+            String ruta = session.getAttribute("path").toString();
+            List<Usuario> usuarios;
+            
+            if(ruta.split("\\.")[1].equals("txt"))
+            {
+                usuarios = ProcesarTXT(new File(ruta));
+            }
+            else
+            {
+                usuarios = ProcesarExcel(new File(ruta));
+            }
+            
+            for(Usuario usuario : usuarios)
+            {
+                usuarioDAOImplementation.Add(usuario);
+            }
+            
+            session.removeAttribute("path");
+        } catch (Exception ex) 
+        {
+            System.out.println(ex.getLocalizedMessage());
+        }
+        return "redirect:/usuario";
+    }
 
     // MÉTODOS CARGA MASIVA
-    private List<Usuario> ProcesarTXT(MultipartFile file) {
+    private List<Usuario> ProcesarTXT(File file) {
         try {
-            InputStream inputStream = file.getInputStream();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
 
             String linea = "";
             List<Usuario> usuarios = new ArrayList<>();
@@ -254,11 +305,12 @@ public class UsuarioController {
         }
     }
     
-    private List<Usuario> ProcesarExcel(MultipartFile file)
+    private List<Usuario> ProcesarExcel(File file)
     {
         List<Usuario> usuarios = new ArrayList<>();
-        try (XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream()))
+        try
         {
+            XSSFWorkbook workbook = new XSSFWorkbook(file);
             Sheet sheet = workbook.getSheetAt(0);
             for(Row row : sheet)
             {
@@ -267,34 +319,37 @@ public class UsuarioController {
                 usuario.setNombre(row.getCell(1) != null ? row.getCell(1).toString() : "");
                 usuario.setApellidoPaterno(row.getCell(2) != null ? row.getCell(2).toString() : "");
                 usuario.setApellidoMaterno(row.getCell(3) != null ? row.getCell(3).toString() : "");
-                SimpleDateFormat sdf = new SimpleDateFormat();
+                SimpleDateFormat format = new SimpleDateFormat();
                 if(row.getCell(4) != null)
                 {
-                    if(row.getCell(4).getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(row.getCell(4)))
+                    if(row.getCell(4).getCellType() == CellType.NUMERIC || DateUtil.isCellDateFormatted(row.getCell(4)))
                     {
                         usuario.setFechaNacimiento(row.getCell(4).getDateCellValue());
                     }
                     else
                     {
-                        usuario.setFechaNacimiento(sdf.parse(row.getCell(4).toString()));
+                        usuario.setFechaNacimiento(format.parse(row.getCell(4).toString()));
                     }
                 }
                 usuario.setSexo(row.getCell(5) != null ? row.getCell(5).toString() : "");
                 usuario.setCurp(row.getCell(6) != null ? row.getCell(6).toString() : "");
                 usuario.setEmail(row.getCell(7) != null ? row.getCell(7).toString() : "");
                 usuario.setPassword(row.getCell(8) != null ? row.getCell(8).toString() : "");
-                usuario.setTelefono(row.getCell(9) != null ? row.getCell(9).toString() : "");
-                usuario.setCelular(row.getCell(10) != null ? row.getCell(10).toString() : "");
+                DataFormatter dataFormatter = new DataFormatter();
+                usuario.setTelefono(row.getCell(9) != null ? dataFormatter.formatCellValue(row.getCell(9)) : "");
+                usuario.setCelular(row.getCell(10) != null ? dataFormatter.formatCellValue(row.getCell(10)) : "");
                 
                 usuario.Rol = new Rol();
                 usuario.Rol.setIdRol(row.getCell(11) != null  ? (int) row.getCell(11).getNumericCellValue() : 0);
                 
                 usuario.Direccion = new ArrayList<>();
                 Direccion direccion = new Direccion();
-                usuario.Direccion.get(0).setCalle(row.getCell(12) != null ? row.getCell(12).toString() : "");
-                usuario.Direccion.get(0).setNumeroExterior(row.getCell(13) != null ? row.getCell(13).toString() : "");
-                usuario.Direccion.get(0).setNumeroInterior(row.getCell(14) != null ? row.getCell(14).toString() : "");
-                usuario.Direccion.get(0).Colonia.setIdColonia(row.getCell(15) != null ? (int) row.getCell(15).getNumericCellValue() : 0);
+                direccion.setCalle(row.getCell(12) != null ? row.getCell(12).toString() : "");
+                direccion.setNumeroExterior(row.getCell(13) != null ? dataFormatter.formatCellValue(row.getCell(13)) : "");
+                direccion.setNumeroInterior(row.getCell(14) != null ? dataFormatter.formatCellValue(row.getCell(14)) : "");
+                
+                direccion.Colonia = new Colonia();
+                direccion.Colonia.setIdColonia(row.getCell(15) != null ? (int) row.getCell(15).getNumericCellValue() : 0);
                 usuario.Direccion.add(direccion);
                 
                 usuarios.add(usuario);
@@ -324,7 +379,7 @@ public class UsuarioController {
                 errores.add(new ErrorCM(linea, usuario.getApellidoMaterno(), "El campo APELLIDO MATERNO es obligatorio"));
             }
             if (usuario.getFechaNacimiento() == null || usuario.getFechaNacimiento().equals("")) {
-                errores.add(new ErrorCM(linea,usuario.getFechaNacimiento().toString(), "El campo FECHA DE NACIMIENTO es obligatorio"));
+                errores.add(new ErrorCM(linea,"fecha vacia", "El campo FECHA DE NACIMIENTO es obligatorio"));
             }
             if (usuario.getSexo() == null || usuario.getSexo() == "") {
                 errores.add(new ErrorCM(linea, usuario.getSexo(), "El campo SEXO es obligatorio"));
@@ -344,13 +399,9 @@ public class UsuarioController {
             if (usuario.getCelular() == null || usuario.getCelular() == "") {
                 errores.add(new ErrorCM(linea, usuario.getCelular(), "El campo CELULAR es obligatorio"));
             }
-            usuario.Rol = new Rol();
             if (usuario.Rol.getIdRol() <= 0) {
                 errores.add(new ErrorCM(linea, String.valueOf(usuario.Rol.getIdRol()) , "El campo ID ROL debe ser mayor a cero"));
             }
-            usuario.Direccion = new ArrayList<>();
-            Direccion direccion = new Direccion();
-            usuario.Direccion.add(direccion);
             if (usuario.Direccion.get(0).getCalle() == null || usuario.Direccion.get(0).getCalle() == "") {
                 errores.add(new ErrorCM(linea, usuario.getNombre(), "El campo CALLE es obligatorio"));
             }
@@ -360,10 +411,8 @@ public class UsuarioController {
             if (usuario.Direccion.get(0).getNumeroInterior() == null || usuario.Direccion.get(0).getNumeroInterior() == "") {
                 errores.add(new ErrorCM(linea, usuario.Direccion.get(0).getNumeroInterior(), "El campo NÚMERO INTERIOR es obligatorio"));
             }
-            direccion.Colonia = new Colonia();
-            usuario.Direccion.add(direccion);
-            if (direccion.Colonia.getIdColonia() <= 0) {
-                errores.add(new ErrorCM(linea, String.valueOf(direccion.Colonia.getIdColonia()), "El campo ID COLONIA debe ser mayor a cero"));
+            if (usuario.Direccion.get(0).Colonia.getIdColonia()<= 0) {
+                errores.add(new ErrorCM(linea, String.valueOf(usuario.Direccion.get(0).Colonia.getIdColonia()), "El campo ID COLONIA debe ser mayor a cero"));
             }
             linea++;
         }
