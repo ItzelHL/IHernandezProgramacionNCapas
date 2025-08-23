@@ -5,7 +5,7 @@ import com.digis01.IHernandezProgramacionNCapas.ML.Usuario;
 
 public interface IUsuarioDAO 
 {
-    Result GetAll();
+    Result GetAll(Usuario usuario);
     
     Result GetById(int idUsuario);
     

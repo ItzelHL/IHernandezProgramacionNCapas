@@ -63,8 +63,10 @@ public class UsuarioController {
     private ColoniaDAOImplementation coloniaDAOImplementation;
 
     @GetMapping // localhost:8080/usuario
-    public String Index(Model model) {
-        Result result = usuarioDAOImplementation.GetAll();
+    public String Index(Model model) 
+    {
+        Result result = usuarioDAOImplementation.GetAll(new Usuario(" ", " ", " ", new Rol()));
+        model.addAttribute("", new Usuario());
 
         if (result.correct) {
             model.addAttribute("usuarios", result.objects);
@@ -72,6 +74,14 @@ public class UsuarioController {
             model.addAttribute("usuarios", null);
         }
 
+        return "UsuarioIndex";
+    }
+    
+    @PostMapping() // localhost:8080/usuario/add
+    public String Index(Model model, @ModelAttribute("usuarioBusqueda") Usuario usuarioBusqueda) 
+    {
+        Result result = usuarioDAOImplementation.GetAll(usuarioBusqueda);
+        model.addAttribute("usuarios", result.objects);
         return "UsuarioIndex";
     }
 
@@ -103,7 +113,8 @@ public class UsuarioController {
     public String Add(@Valid @ModelAttribute("usuario") Usuario usuario,
             BindingResult bindingResult,
             Model model,
-            @RequestParam("imagenFile") MultipartFile imagen) {
+            @RequestParam("imagenFile") MultipartFile imagen) 
+    {
         if (bindingResult.hasErrors()) {
             model.addAttribute("paises", paisDAOImplementation.GetAllPais().objects);
             model.addAttribute("roles", rolDAOImplementation.GetAll().objects);
@@ -127,6 +138,8 @@ public class UsuarioController {
             return "redirect:/usuario";
         }
     }
+    
+    
 
     @GetMapping("formEditable") // localhost:8080/usuario/formEditable
     public String FormEditable(@RequestParam int IdUsuario,
@@ -158,10 +171,12 @@ public class UsuarioController {
     }
 
     @PostMapping("update") // localhost:8080/usuario/update
-    public String Update(@Valid Usuario usuario,
-            BindingResult bindingResult,
-            Model model) {
-        if (bindingResult.hasErrors()) {
+    public String Update(@Valid @ModelAttribute("Usuario") Usuario usuario,
+                                        BindingResult bindingResult,
+                                        Model model) 
+    {
+        if (bindingResult.hasErrors()) 
+        {
             model.addAttribute("paises", paisDAOImplementation.GetAllPais().objects);
             model.addAttribute("roles", rolDAOImplementation.GetAll().objects);
             model.addAttribute("usuario", usuario);
@@ -178,7 +193,8 @@ public class UsuarioController {
     }
 
     @PostMapping("cargaMasiva") // localhost:8080/usuario/cargaMasiva
-    public String CargaMasiva(@RequestParam("archivo") MultipartFile file, Model model, HttpSession session) {
+    public String CargaMasiva(@RequestParam("archivo") MultipartFile file, Model model, HttpSession session) 
+    {
         String root = System.getProperty("user.dir");
         String rutaArchivo = "/src/main/resources/archivos/";
         String fechaSubida = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmSS"));

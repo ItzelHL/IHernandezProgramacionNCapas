@@ -65,6 +65,14 @@ public class Usuario
     
     public Usuario(){}
     
+    public Usuario(String nombre, String apellidoPaterno, String apellidoMaterno, Rol rol) 
+    {
+        this.Nombre = nombre;
+        this.ApellidoPaterno = apellidoPaterno;
+        this.ApellidoMaterno = apellidoMaterno;
+        this.Rol = rol;
+    }
+    
     public Usuario(String imagen, int idUsuario, String username, String nombre, String apellidoPaterno, String apellidoMaterno, String email, 
             String password, Date fechaNacimiento, String sexo, String telefono, String celular, String curp)
     {
@@ -200,15 +208,14 @@ public class Usuario
         return Rol;
     }
 
-    public List<Direccion> getDireccion() {
-        return Direccion;
-    }
-
-    public void setDireccion(List<Direccion> direccion) {
+     public void setDireccion(List<Direccion> direccion) 
+    {
         this.Direccion = direccion;
     }
-   
-   
+    public List<Direccion> getDireccion() 
+    {
+        return Direccion;
+    }
 
     public void setImagen(String imagen) 
     {
@@ -218,9 +225,4 @@ public class Usuario
     {
         return Imagen;
     }
-
-    
-    
-    
-    
 }

@@ -4,8 +4,44 @@
 
     <body layout:fragment="body" style="background-color: #181818;">
         <div class = "container" style="font-family: Tahoma, sans-serif; ">
+            <div style="">
+                <form id="filterForm" method="post" th:object="${usuarioBusqueda}" th:action="@{/usuario}" style="padding-top: 10px;">
+                    <div class="row gx-2 gx-md-3 mb-7">
+                        <div class= "col-md-2 mb-2 mb-md-0">
+                            <div class="input-group input-group-merge">
+                                <span class="input-group-prepend input-group-text"><i class="bi bi-person"></i></span>
+                                <input type="text" class="form-control form-control-md" id="filtroNombreUsuario" placeholder="Nombre usuario" th:field="*{Nombre}">
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3 mb-md-0">
+                            <div class="input-group input-group-merge">
+                                <span class="input-group-prepend input-group-text"><i class="bi bi-person"></i></span>
+                                <input type="text" class="form-control form-control-md" id="filtroApellidoPaterno" placeholder="Apellido paterno" th:field="*{ApellidoPaterno}">
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3 mb-md-0">
+                            <div class="input-group input-group-merge">
+                                <span class="input-group-prepend input-group-text"><i class="bi bi-person"></i></i></span>
+                                <input type="text" class="form-control form-control-md" id="filtroApellidoMaterno" placeholder="Apellido materno" th:field="*{ApellidoMaterno}">
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-2 mb-md-0">
+                            <div class="input-group input-group-merge">
+                                <span class="input-group-prepend input-group-text"><i class="bi bi-person-rolodex"></i></span>
+                                <select id="filtroRol" class="form-select form-select-md" aria-label="Rol">
+                                    <option value= "0" selected>Rol</option>
+                                    <option>One</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-2 mb-2 mb-md-0">
+                            <button type="submit" class="btn btn-primary btn-md" id="botonEdit"><i class="bi-search"></i> Buscar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
             <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4" style="align-items: center; padding-bottom: 10px">
-                <a th:href="@{/usuario/action/{IdUsuario}(IdUsuario=0)}" class="btn btn-success mt-4 w-100 fw-bold" style="justify-content: center; align-items: center">Agregar usuario <i class="bi bi-person-add"></i></a>
+                <a th:href="@{/usuario/action/{IdUsuario}(IdUsuario=0)}" class="btn btn-success btn-lg" style="justify-content: center; align-items: center">Agregar usuario <i class="bi bi-person-add"></i></a>
             </div>
             <table class = "table table-hover table-striped-columns" style="overflow-x: auto"> 
                 <thead>
