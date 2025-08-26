@@ -5,7 +5,7 @@
     <body layout:fragment="body" style="background-color: #181818;">
         <div class = "container" style="font-family: Tahoma, sans-serif; ">
             <div style="">
-                <form id="filterForm" method="post" th:object="${usuarioBusqueda}" th:action="@{/usuario}" style="padding-top: 10px;">
+                <form id="filterForm" method="post" th:action="@{/usuario}"  th:object="${usuarioBusqueda}" style="padding-top: 10px;">
                     <div class="row gx-2 gx-md-3 mb-7">
                         <div class= "col-md-2 mb-2 mb-md-0">
                             <div class="input-group input-group-merge">
@@ -28,9 +28,9 @@
                         <div class="col-md-2 mb-2 mb-md-0">
                             <div class="input-group input-group-merge">
                                 <span class="input-group-prepend input-group-text"><i class="bi bi-person-rolodex"></i></span>
-                                <select id="filtroRol" class="form-select form-select-md" aria-label="Rol">
+                                <select id="filtroRol" class="form-select form-select-md" aria-label="Rol" th:field="*{rol.IdRol}">
                                     <option value= "0" selected>Rol</option>
-                                    <option>One</option>
+                                    <option th:each="rol : ${roles}" th:text="${rol.nombre}" th:value="${rol.IdRol}">One</option>
                                 </select>
                             </div>
                         </div>

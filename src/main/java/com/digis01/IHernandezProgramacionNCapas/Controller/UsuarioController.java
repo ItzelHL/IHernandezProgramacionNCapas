@@ -6,6 +6,7 @@ import com.digis01.IHernandezProgramacionNCapas.DAO.MunicipioDAOImplementation;
 import com.digis01.IHernandezProgramacionNCapas.DAO.PaisDAOImplementation;
 import com.digis01.IHernandezProgramacionNCapas.DAO.RolDAOImplementation;
 import com.digis01.IHernandezProgramacionNCapas.DAO.UsuarioDAOImplementation;
+import com.digis01.IHernandezProgramacionNCapas.DAO.UsuarioJPADAOImplementation;
 import com.digis01.IHernandezProgramacionNCapas.ML.Colonia;
 import com.digis01.IHernandezProgramacionNCapas.ML.Direccion;
 import com.digis01.IHernandezProgramacionNCapas.ML.ErrorCM;
@@ -61,13 +62,19 @@ public class UsuarioController {
     private MunicipioDAOImplementation municipioDAOImplementation;
     @Autowired
     private ColoniaDAOImplementation coloniaDAOImplementation;
+    @Autowired
+    private UsuarioJPADAOImplementation usuarioJPADAOImplementation;
 
     @GetMapping // localhost:8080/usuario
     public String Index(Model model) 
     {
         Result result = usuarioDAOImplementation.GetAll(new Usuario(" ", " ", " ", new Rol()));
-        model.addAttribute("", new Usuario());
-
+        
+        usuarioJPADAOImplementation.GetAll();
+        
+        model.addAttribute("usuarioBusqueda", new Usuario());
+        model.addAttribute("roles", rolDAOImplementation.GetAll().objects);
+        
         if (result.correct) {
             model.addAttribute("usuarios", result.objects);
         } else {
@@ -81,6 +88,7 @@ public class UsuarioController {
     public String Index(Model model, @ModelAttribute("usuarioBusqueda") Usuario usuarioBusqueda) 
     {
         Result result = usuarioDAOImplementation.GetAll(usuarioBusqueda);
+        model.addAttribute("roles", rolDAOImplementation.GetAll().objects);
         model.addAttribute("usuarios", result.objects);
         return "UsuarioIndex";
     }

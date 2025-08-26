@@ -6,7 +6,7 @@ public class Rol {
     
     public Rol(){}
     
-    public Rol(Integer idRol)
+    public Rol(int  idRol)
     {
         this.IdRol = idRol;
     }

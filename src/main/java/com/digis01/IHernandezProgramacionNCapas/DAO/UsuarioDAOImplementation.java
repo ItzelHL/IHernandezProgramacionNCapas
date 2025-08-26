@@ -28,13 +28,13 @@ public class UsuarioDAOImplementation implements IUsuarioDAO
 
         try 
         {
-            jdbcTemplate.execute("{CALL UsuarioDireccionGetAll(?, ?, ?, ?, ?)}", (CallableStatementCallback<Integer>) callableStatement -> 
+            jdbcTemplate.execute("CALL UsuarioDireccionGetAll(?, ?, ?, ?, ?)", (CallableStatementCallback<Integer>) callableStatement -> 
             {
-                callableStatement.registerOutParameter(1, java.sql.Types.REF_CURSOR);
-                callableStatement.setString(2, usuario.getNombre());
-                callableStatement.setString(3, usuario.getApellidoPaterno());
-                callableStatement.setString(4, usuario.getApellidoMaterno());
-                callableStatement.setInt(5, usuario.Rol.getIdRol());
+                callableStatement.setString(1, usuario.getNombre());
+                callableStatement.setString(2, usuario.getApellidoPaterno());
+                callableStatement.setString(3, usuario.getApellidoMaterno());
+                callableStatement.setInt(4, usuario.Rol.getIdRol());
+                callableStatement.registerOutParameter(5, java.sql.Types.REF_CURSOR);
                 callableStatement.execute();
 
                 ResultSet resultSet = (ResultSet) callableStatement.getObject(5);
