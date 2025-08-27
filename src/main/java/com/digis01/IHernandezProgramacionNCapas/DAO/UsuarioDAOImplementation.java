@@ -148,7 +148,7 @@ public class UsuarioDAOImplementation implements IUsuarioDAO
                 callableStatement.setInt(2, idUsuario);
                 
                 callableStatement.execute();
-                ResultSet resultSet = (ResultSet) callableStatement.getObject(2);
+                ResultSet resultSet = (ResultSet) callableStatement.getObject(1);
                 
                 if(resultSet.next())
                 {
@@ -196,7 +196,7 @@ public class UsuarioDAOImplementation implements IUsuarioDAO
                 callableStatement.setInt(2, idUsuario);
                 
                 callableStatement.execute();
-                ResultSet resultSet = (ResultSet) callableStatement.getObject(2);
+                ResultSet resultSet = (ResultSet) callableStatement.getObject(1);
                 
                 if (resultSet.next()) {
                     Usuario usuario = new Usuario();
@@ -317,6 +317,32 @@ public class UsuarioDAOImplementation implements IUsuarioDAO
     }
     
     @Override
+    public Result AddDireccion(Usuario usuario)
+    {
+        Result result = new Result();
+        
+        try 
+        {
+            jdbcTemplate.execute("CALL DireccionADDUsuario(?, ?, ?, ?, ?)", (CallableStatementCallback<Boolean>) callableStatement -> {
+                callableStatement.setString(1, usuario.Direccion.get(0).getCalle());
+                callableStatement.setString(2, usuario.Direccion.get(0).getNumeroExterior());
+                callableStatement.setString(3, usuario.Direccion.get(0).getNumeroInterior());
+                callableStatement.setInt(4, usuario.Direccion.get(0).Colonia.getIdColonia());
+                
+                return true;
+            });
+            result.correct = true;
+        } catch (Exception ex) 
+        {
+            result.correct = false;
+            result.errorMessage = ex.getLocalizedMessage();
+            result.ex = ex;
+        }
+        
+        return result;
+    }
+    
+    @Override
     public Result UpdateUsuario(Usuario usuario)
     {
         Result result = new Result();
@@ -352,5 +378,4 @@ public class UsuarioDAOImplementation implements IUsuarioDAO
         
         return result;
     }
-
 }

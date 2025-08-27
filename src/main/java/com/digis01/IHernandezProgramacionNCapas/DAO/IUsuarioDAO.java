@@ -13,5 +13,7 @@ public interface IUsuarioDAO
     
     Result Add(Usuario usuario);
     
+    Result AddDireccion(Usuario usuario);
+    
     Result UpdateUsuario(Usuario usuario);
 }

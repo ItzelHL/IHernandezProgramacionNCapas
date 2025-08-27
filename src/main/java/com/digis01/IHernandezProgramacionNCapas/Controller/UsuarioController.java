@@ -18,8 +18,6 @@ import jakarta.validation.Valid;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -68,9 +66,9 @@ public class UsuarioController {
     @GetMapping // localhost:8080/usuario
     public String Index(Model model) 
     {
-        Result result = usuarioDAOImplementation.GetAll(new Usuario(" ", " ", " ", new Rol()));
+//        Result result = usuarioDAOImplementation.GetAll(new Usuario(" ", " ", " ", new Rol()));
         
-        usuarioJPADAOImplementation.GetAll();
+        Result result = usuarioJPADAOImplementation.GetAll();
         
         model.addAttribute("usuarioBusqueda", new Usuario());
         model.addAttribute("roles", rolDAOImplementation.GetAll().objects);
@@ -88,13 +86,15 @@ public class UsuarioController {
     public String Index(Model model, @ModelAttribute("usuarioBusqueda") Usuario usuarioBusqueda) 
     {
         Result result = usuarioDAOImplementation.GetAll(usuarioBusqueda);
+//        Result result = usuarioJPADAOImplementation.GetAll();
         model.addAttribute("roles", rolDAOImplementation.GetAll().objects);
         model.addAttribute("usuarios", result.objects);
         return "UsuarioIndex";
     }
 
     @GetMapping("/action/{IdUsuario}") // localhost:8080/usuario/action/{idUsuario}
-    public String Add(Model model, @PathVariable("IdUsuario") int IdUsuario) {
+    public String Add(Model model, @PathVariable("IdUsuario") int IdUsuario) 
+    {
         if (IdUsuario == 0) //usuario no existe - usuarioDireccionAdd
         {
             //        Result result = rolDAOImplementation.GetAll();
@@ -108,9 +108,11 @@ public class UsuarioController {
         {
             Result result = usuarioDAOImplementation.DireccionesByIdUsuario(IdUsuario);
 
-            if (result.correct) {
+            if (result.correct) 
+            {
                 model.addAttribute("usuario", result.object);
-            } else {
+            } else 
+            {
                 return "Error";
             }
             return "UsuarioDetail";
@@ -172,6 +174,7 @@ public class UsuarioController {
             return "UsuarioForm";
         } else if (IdDireccion == 0) //Agregar dirección
         {
+            
             Result result;
         } else {
         }

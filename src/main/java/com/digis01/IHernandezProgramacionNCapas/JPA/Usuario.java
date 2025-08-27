@@ -1,15 +1,16 @@
 package com.digis01.IHernandezProgramacionNCapas.JPA;
 
-import com.digis01.IHernandezProgramacionNCapas.ML.Direccion;
-import com.digis01.IHernandezProgramacionNCapas.ML.Rol;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -57,12 +58,13 @@ public class Usuario
     
     @Column(name = "celular")
     private String Celular;
-    
+   
     @ManyToOne
+    @JoinColumn(name = "idrol")
     public Rol Rol;
     
-    @ManyToMany
-    public List<Direccion> Direccion;
+    @OneToMany(mappedBy = "Usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    public List<Direccion> Direcciones = new ArrayList<>();
     
     public Usuario(){}
 
@@ -82,7 +84,7 @@ public class Usuario
         this.Telefono = telefono;
         this.Celular = celular;
         this.Rol = rol;
-        this.Direccion = direccion;
+        this.Direcciones = direccion;
     }
     
     public void setIdUsuario(int idUsuario)
@@ -211,12 +213,12 @@ public class Usuario
         return Rol;
     }
 
-    public void setDireccion(List<Direccion> direccion) 
+    public void setDireccion(List<Direccion> direcciones) 
     {
-        this.Direccion = direccion;
+        this.Direcciones = direcciones;
     }
     public List<Direccion> getDireccion() 
     {
-        return Direccion;
+        return Direcciones;
     }
 }
