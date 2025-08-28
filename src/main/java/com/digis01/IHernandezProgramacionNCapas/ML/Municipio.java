@@ -13,6 +13,12 @@ public class Municipio {
         this.Nombre = nombre;
     }
     
+    public Municipio(com.digis01.IHernandezProgramacionNCapas.JPA.Municipio municipioJPA)
+    {
+        this.IdMunicipio = municipioJPA.getIdMunicipio();
+        this.Nombre = municipioJPA.getNombre();
+    }
+    
     public void setIdMunicipio(int idMunicipio)
     {
         this.IdMunicipio = idMunicipio;

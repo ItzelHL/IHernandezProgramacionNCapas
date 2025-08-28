@@ -17,6 +17,12 @@ public class Rol {
         this.Nombre = nombre;
     }
     
+    public Rol(com.digis01.IHernandezProgramacionNCapas.JPA.Rol rolJPA)
+    {
+        this.IdRol = rolJPA.getIdRol();
+        this.Nombre = rolJPA.getNombre();
+    }
+    
     public void setIdRol(int idRol)
     {
         this.IdRol = idRol;

@@ -1,6 +1,5 @@
 package com.digis01.IHernandezProgramacionNCapas.DAO;
 
-import com.digis01.IHernandezProgramacionNCapas.JPA.Direccion;
 import com.digis01.IHernandezProgramacionNCapas.ML.Result;
 import com.digis01.IHernandezProgramacionNCapas.JPA.Usuario;
 import jakarta.persistence.EntityManager;
@@ -47,13 +46,14 @@ public class UsuarioJPADAOImplementation implements IUsuarioJPADAO
 
     @Override
     @Transactional
-    public Result Add(Usuario usuario) 
+    public Result Add(com.digis01.IHernandezProgramacionNCapas.ML.Usuario usuarioML) 
     {
         Result result = new Result();
         
         try 
         {
-            entityManager.createNativeQuery("");
+            Usuario usuarioJPA = new Usuario(usuarioML);
+            entityManager.persist(usuarioJPA);
             
             result.correct = true;
         } catch (Exception ex) 

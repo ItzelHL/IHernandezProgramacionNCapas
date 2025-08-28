@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 
-public class Usuario {
+public class Usuario 
+{
 
     private int IdUsuario;
 //    @NotEmpty(message = "El username debe iniciar con 2 mayúsculas")
@@ -63,10 +64,12 @@ public class Usuario {
 
     private String Imagen;
 
-    public Usuario() {
+    public Usuario() 
+    {
     }
 
-    public Usuario(String nombre, String apellidoPaterno, String apellidoMaterno, Rol rol) {
+    public Usuario(String nombre, String apellidoPaterno, String apellidoMaterno, Rol rol) 
+    {
         this.Nombre = nombre;
         this.ApellidoPaterno = apellidoPaterno;
         this.ApellidoMaterno = apellidoMaterno;

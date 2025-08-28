@@ -11,6 +11,12 @@ public class Pais {
         this.IdPais = idPais;
         this.Nombre = nombre;
     }
+    
+    public Pais(com.digis01.IHernandezProgramacionNCapas.JPA.Pais paisJPA)
+    {
+        this.IdPais = paisJPA.getIdPais();
+        this.Nombre = paisJPA.getNombre();
+    }
 
     public void setIdPais(int idPais) 
     {

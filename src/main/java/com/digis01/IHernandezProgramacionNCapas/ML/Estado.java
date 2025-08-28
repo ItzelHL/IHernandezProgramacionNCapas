@@ -13,6 +13,12 @@ public class Estado {
         this.Nombre = nombre;
     }
     
+    public Estado(com.digis01.IHernandezProgramacionNCapas.JPA.Estado estadoJPA)
+    {
+        this.IdEstado = estadoJPA.getIdEstado();
+        this.Nombre = estadoJPA.getNombre();
+    }
+    
     public void setIdEstado(int idEstado) 
     {
         this.IdEstado = idEstado;

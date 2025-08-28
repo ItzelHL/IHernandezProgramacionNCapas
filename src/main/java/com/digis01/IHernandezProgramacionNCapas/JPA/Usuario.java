@@ -67,6 +67,62 @@ public class Usuario
     public List<Direccion> Direcciones = new ArrayList<>();
     
     public Usuario(){}
+    
+    public Usuario(com.digis01.IHernandezProgramacionNCapas.ML.Usuario usuarioML)
+    {
+        this.IdUsuario = usuarioML.getIdUsuario();
+        this.Imagen = usuarioML.getImagen();
+        this.Username = usuarioML.getUsername();
+        this.Nombre = usuarioML.getNombre();
+        this.ApellidoPaterno = usuarioML.getApellidoPaterno();
+        this.ApellidoMaterno = usuarioML.getApellidoMaterno();
+        this.FechaNacimiento = usuarioML.getFechaNacimiento();
+        this.Sexo = usuarioML.getSexo();
+        this.Curp = usuarioML.getCurp();
+        this.Email = usuarioML.getEmail();
+        this.Password = usuarioML.getPassword();
+        this.Telefono = usuarioML.getTelefono();
+        this.Celular = usuarioML.getCelular();
+        this.Rol = new Rol();
+        this.Rol.setIdRol(usuarioML.Rol.getIdRol());
+        this.Rol.setNombre(usuarioML.Rol.getNombre());
+        if(usuarioML.Direccion != null && usuarioML.Direccion.size() > 0)
+        {
+            this.Direcciones = new ArrayList<>();
+            for (com.digis01.IHernandezProgramacionNCapas.ML.Direccion direcciones : usuarioML.Direccion) 
+            {
+                Direccion direccion = new Direccion();
+                
+                direccion.setIdDireccion(direcciones.getIdDireccion());
+                direccion.setCalle(direcciones.getCalle());
+                direccion.setNumeroExterior(direcciones.getNumeroExterior());
+                direccion.setNumeroInterior(direcciones.getNumeroInterior());
+                
+                direccion.Colonia = new Colonia();
+                
+                direccion.Colonia.setIdColonia(direcciones.Colonia.getIdColonia());
+                direccion.Colonia.setNombre(direcciones.Colonia.getNombre());
+                direccion.Colonia.setCodigoPostal(direcciones.Colonia.getCodigoPostal());
+                
+                direccion.Colonia.Municipio = new Municipio();
+                
+                direccion.Colonia.Municipio.setIdMunicipio(direcciones.Colonia.Municipio.getIdMunicipio());
+                direccion.Colonia.Municipio.setNombre(direcciones.Colonia.Municipio.getNombre());
+                
+                direccion.Colonia.Municipio.Estado = new Estado();
+                
+                direccion.Colonia.Municipio.Estado.setIdEstado(direcciones.Colonia.Municipio.Estado.getIdEstado());
+                direccion.Colonia.Municipio.Estado.setNombre(direcciones.Colonia.Municipio.Estado.getNombre());
+                
+                direccion.Colonia.Municipio.Estado.Pais = new Pais();
+                
+                direccion.Colonia.Municipio.Estado.Pais.setIdPais(direcciones.Colonia.Municipio.Estado.Pais.getIdPais());
+                direccion.Colonia.Municipio.Estado.Pais.setNombre(direcciones.Colonia.Municipio.Estado.Pais.getNombre());
+                
+                this.Direcciones.add(direccion);
+            }
+        }
+    }
 
     public Usuario(int idUsuario, String imagen, String username, String nombre, String apellidoPaterno, String apellidoMaterno, Date fechaNacimiento, String sexo, String curp, String email, String password, String telefono, String celular, Rol rol, List<Direccion> direccion) 
     {

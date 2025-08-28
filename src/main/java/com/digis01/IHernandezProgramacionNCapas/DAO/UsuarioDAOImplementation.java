@@ -317,19 +317,27 @@ public class UsuarioDAOImplementation implements IUsuarioDAO
     }
     
     @Override
-    public Result AddDireccion(Usuario usuario)
+    public Result AddDireccion(int idUsuario)
     {
         Result result = new Result();
         
         try 
         {
             jdbcTemplate.execute("CALL DireccionADDUsuario(?, ?, ?, ?, ?)", (CallableStatementCallback<Boolean>) callableStatement -> {
+                Usuario usuario = new Usuario();
                 callableStatement.setString(1, usuario.Direccion.get(0).getCalle());
                 callableStatement.setString(2, usuario.Direccion.get(0).getNumeroExterior());
                 callableStatement.setString(3, usuario.Direccion.get(0).getNumeroInterior());
                 callableStatement.setInt(4, usuario.Direccion.get(0).Colonia.getIdColonia());
+                callableStatement.setInt(5, idUsuario);
                 
-                return true;
+                 int isCorrect = callableStatement.executeUpdate();
+
+                if (isCorrect == -1) 
+                {
+                    return true;
+                }
+                return false;
             });
             result.correct = true;
         } catch (Exception ex) 
@@ -338,7 +346,6 @@ public class UsuarioDAOImplementation implements IUsuarioDAO
             result.errorMessage = ex.getLocalizedMessage();
             result.ex = ex;
         }
-        
         return result;
     }
     
