@@ -16,13 +16,14 @@ public class ColoniaJPADAOImplementation implements IColoniaJPADAO
     EntityManager entityManager;
     
     @Override
-    public Result ColoniaByMunicipioGetAll(int idMunicipio)
+    public Result ColoniaByMunicipioGetAll(int IdMunicipio)
     {
         Result result = new Result();
         
         try 
         {
-            TypedQuery<Colonia> queryColonia = entityManager.createQuery("FROM Colonia ORDER BY IdColonia", Colonia.class);
+            TypedQuery<Colonia> queryColonia = entityManager.createQuery("FROM Colonia WHERE Municipio.IdMunicipio = :IdMunicipio ORDER BY IdColonia", Colonia.class);
+            queryColonia.setParameter("IdMunicipio", IdMunicipio);
             List<Colonia> colonias = queryColonia.getResultList();
             
             result.objects = new ArrayList<>();

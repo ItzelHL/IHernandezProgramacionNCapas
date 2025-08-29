@@ -38,6 +38,12 @@ public class Estado
         this.Pais = pais;
     }
     
+    public Estado(com.digis01.IHernandezProgramacionNCapas.ML.Estado estadoML)
+    {
+        this.IdEstado = estadoML.getIdEstado();
+        this.Nombre = estadoML.getNombre();
+    }
+    
     public void setIdEstado(int idEstado) 
     {
         this.IdEstado = idEstado;

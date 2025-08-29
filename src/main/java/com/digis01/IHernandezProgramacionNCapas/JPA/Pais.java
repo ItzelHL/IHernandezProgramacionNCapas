@@ -25,6 +25,12 @@ public class Pais
         this.Nombre = nombre;
     }
     
+    public Pais(com.digis01.IHernandezProgramacionNCapas.ML.Pais paisML)
+    {
+        this.IdPais = paisML.getIdPais();
+        this.Nombre = paisML.getNombre();
+    }
+    
     public void setIdPais(int idPais) 
     {
         this.IdPais = idPais;

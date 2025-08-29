@@ -45,6 +45,13 @@ public class Colonia
         this.Municipio = municipio;
     }
     
+    public Colonia(com.digis01.IHernandezProgramacionNCapas.ML.Colonia coloniaML)
+    {
+        this.IdColonia = coloniaML.getIdColonia();
+        this.Nombre = coloniaML.getNombre();
+        this.CodigoPostal = coloniaML.getCodigoPostal();
+    }
+    
     public void setIdColonia(int idColonia)
     {
         this.IdColonia = idColonia;

@@ -124,18 +124,21 @@
                             <label for="estadoddl" class="form-label fw-bold">Estado</label>
                             <select id="estadoddl" class="form-select" aria-label="Selecciona un estado" th:field="*{Direccion[0].Colonia.Municipio.Estado.IdEstado}">
                                 <option value= "0" selected>Selecciona un estado</option>
+                                <option th:each="estado : ${estados}" th:value="${estado.IdEstado}" th:text="${Estado.Nombre}">One</option>
                             </select>
                         </div>
                         <div class="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-2" data-bs-theme="dark">
                             <label for="municipioddl" class="form-label fw-bold">Municipio</label>
                             <select id="municipioddl" class="form-select" aria-label="Selecciona un municipio" th:field="*{Direccion[0].Colonia.Municipio.IdMunicipio}">
                                 <option value= "0" selected>Selecciona un municipio</option>
+                                <option th:each="municipio : ${municipios}" th:value="${municipio.IdMunicipio}" th:text="${municipio.Nombre}">One</option>
                             </select>
                         </div>
                         <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-3 col-sm-3" data-bs-theme="dark">
                             <label for="coloniaddl" class="form-label">Colonia</label>
                             <select id="coloniaddl" class="form-select" aria-label="Selecciona una colonia" th:field="*{Direccion[0].Colonia.IdColonia}">
                                 <option value= "0" selected>Selecciona un colonia</option>
+                                <option th:each="colonia : ${colonias}" th:value="${colonia.IdColonia}" th:text="${colonia.Nombre}">One</option>
                             </select>
                         </div>
                         <div class="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-2" >
@@ -224,6 +227,10 @@
                                     {
                                         $("#estadoddl").empty();
                                         $("#estadoddl").append("<option value=0 selected>Selecciona un estado</option>");
+                                        $("#municipioddl").empty();
+                                        $("#municipioddl").append("<option value=0 selected>Selecciona un municipio</option>");
+                                        $("#coloniaddl").empty();
+                                        $("#coloniaddl").append("<option value=0 selected>Selecciona una colonia</option>");
                                         $.each(data.objects, function (indice, estado)
                                         {
                                             $("#estadoddl").append("<option value=" + estado.idEstado + ">" + estado.nombre + "</option>");

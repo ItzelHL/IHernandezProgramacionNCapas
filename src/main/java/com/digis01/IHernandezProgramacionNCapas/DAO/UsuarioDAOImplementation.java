@@ -198,7 +198,8 @@ public class UsuarioDAOImplementation implements IUsuarioDAO
                 callableStatement.execute();
                 ResultSet resultSet = (ResultSet) callableStatement.getObject(1);
                 
-                if (resultSet.next()) {
+                if (resultSet.next()) 
+                {
                     Usuario usuario = new Usuario();
 
                     usuario.setIdUsuario(resultSet.getInt("IdUsuario"));
@@ -220,7 +221,8 @@ public class UsuarioDAOImplementation implements IUsuarioDAO
                     usuario.Rol.setNombre(resultSet.getString("NombreRol"));
 
                     int idDireccion;
-                    if ((idDireccion = resultSet.getInt("IdDireccion")) != 0) {
+                    if ((idDireccion = resultSet.getInt("IdDireccion")) != 0) 
+                    {
 
                         usuario.Direccion = new ArrayList<>();
 
@@ -258,7 +260,8 @@ public class UsuarioDAOImplementation implements IUsuarioDAO
                 return 1;
             });
             
-        } catch (Exception ex) {
+        } catch (Exception ex) 
+        {
             result.correct = false;
             result.errorMessage = ex.getLocalizedMessage();
             result.ex = ex;

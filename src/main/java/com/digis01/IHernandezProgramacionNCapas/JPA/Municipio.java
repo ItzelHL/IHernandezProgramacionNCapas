@@ -39,6 +39,12 @@ public class Municipio
         this.Estado = estado;
     }
     
+    public Municipio(com.digis01.IHernandezProgramacionNCapas.ML.Municipio municipioML)
+    {
+        this.IdMunicipio = municipioML.getIdMunicipio();
+        this.Nombre = municipioML.getNombre();
+    }
+    
     public void setIdMunicipio(int idMunicipio)
     {
         this.IdMunicipio = idMunicipio;

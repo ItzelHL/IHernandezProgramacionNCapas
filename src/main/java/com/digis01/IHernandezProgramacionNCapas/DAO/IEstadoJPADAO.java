@@ -4,5 +4,5 @@ import com.digis01.IHernandezProgramacionNCapas.ML.Result;
 
 public interface IEstadoJPADAO 
 {
-    Result EstadoByPaisGetAll(int idPais);
+    Result EstadoByPaisGetAll(int IdPais);
 }

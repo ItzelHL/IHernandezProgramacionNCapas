@@ -32,6 +32,14 @@ public class Direccion {
         this.NumeroInterior = numeroInterior;
         this.NumeroExterior = numeroExterior;
     }
+    
+    public Direccion(com.digis01.IHernandezProgramacionNCapas.JPA.Direccion direccionJPA)
+    {
+        this.IdDireccion = direccionJPA.getIdDireccion();
+        this.Calle = direccionJPA.getCalle();
+        this.NumeroExterior = direccionJPA.getNumeroExterior();
+        this.NumeroInterior = direccionJPA.getNumeroInterior();
+    }
 
     public int getIdDireccion() {
         return IdDireccion;

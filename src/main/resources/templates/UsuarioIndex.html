@@ -60,7 +60,7 @@
                     <tr th:each="usuario : ${usuarios}">
                         <td>
                             <a th:href="@{/usuario/action/{idUsuario}(idUsuario = ${usuario.IdUsuario})}" class="btn btn-success"><i class="bi bi-pencil-square"></i></a>
-                            <a th:href="@{/usuario/action/{idUsuario}(idUsuario = ${usuario.IdUsuario})}" class="btn btn-danger"><i class="bi bi-trash3-fill"></i></a>
+                            <a th:href="@{/usuario/delete/{idUsuario}(idUsuario = ${usuario.IdUsuario})}" class="btn btn-danger"><i class="bi bi-trash3-fill"></i></a>
                         </td>
                         <td>
                             <!--                            <span th:text="|${(usuario.Imagen != null) ? 'Tengo imagen' : 'No tengo imagen'}|"></span>-->

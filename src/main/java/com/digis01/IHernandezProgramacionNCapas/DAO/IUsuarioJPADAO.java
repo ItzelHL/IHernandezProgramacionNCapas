@@ -6,5 +6,11 @@ public interface IUsuarioJPADAO
 {
     Result GetAll();
     
-    Result Add(com.digis01.IHernandezProgramacionNCapas.ML.Usuario usuario);
+    Result GetById(int idUsuario);
+    
+    Result Add(com.digis01.IHernandezProgramacionNCapas.ML.Usuario usuarioML);
+    
+    Result Delete(int idUsuario);
+    
+    Result Update(com.digis01.IHernandezProgramacionNCapas.ML.Usuario usuarioML);
 }

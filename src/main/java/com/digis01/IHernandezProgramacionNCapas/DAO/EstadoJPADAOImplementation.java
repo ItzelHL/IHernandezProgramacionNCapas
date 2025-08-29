@@ -16,13 +16,14 @@ public class EstadoJPADAOImplementation implements IEstadoJPADAO
     EntityManager entityManager;
 
     @Override
-    public Result EstadoByPaisGetAll(int idPais)
+    public Result EstadoByPaisGetAll(int IdPais)
     {
         Result result = new Result();
         
         try 
         {
-            TypedQuery<Estado> queryEstado = entityManager.createQuery("FROM Estado ORDER BY IdEstado", Estado.class);
+            TypedQuery<Estado> queryEstado = entityManager.createQuery("FROM Estado WHERE Pais.IdPais = :IdPais ORDER BY IdEstado", Estado.class);
+            queryEstado.setParameter("IdPais", IdPais);
             List<Estado> estados = queryEstado.getResultList();
             
             result.objects = new ArrayList<>();

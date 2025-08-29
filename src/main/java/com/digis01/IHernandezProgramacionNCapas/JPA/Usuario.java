@@ -83,15 +83,14 @@ public class Usuario
         this.Password = usuarioML.getPassword();
         this.Telefono = usuarioML.getTelefono();
         this.Celular = usuarioML.getCelular();
+        
         this.Rol = new Rol();
         this.Rol.setIdRol(usuarioML.Rol.getIdRol());
         this.Rol.setNombre(usuarioML.Rol.getNombre());
-        if(usuarioML.Direccion != null && usuarioML.Direccion.size() > 0)
+        
+        for (com.digis01.IHernandezProgramacionNCapas.ML.Direccion direcciones : usuarioML.Direccion)
         {
-            this.Direcciones = new ArrayList<>();
-            for (com.digis01.IHernandezProgramacionNCapas.ML.Direccion direcciones : usuarioML.Direccion) 
-            {
-                Direccion direccion = new Direccion();
+            Direccion direccion = new Direccion();
                 
                 direccion.setIdDireccion(direcciones.getIdDireccion());
                 direccion.setCalle(direcciones.getCalle());
@@ -119,8 +118,9 @@ public class Usuario
                 direccion.Colonia.Municipio.Estado.Pais.setIdPais(direcciones.Colonia.Municipio.Estado.Pais.getIdPais());
                 direccion.Colonia.Municipio.Estado.Pais.setNombre(direcciones.Colonia.Municipio.Estado.Pais.getNombre());
                 
-                this.Direcciones.add(direccion);
-            }
+                direccion.Usuario = this;
+                
+                Direcciones.add(direccion);
         }
     }
 
