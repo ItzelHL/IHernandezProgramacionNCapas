@@ -1,5 +1,6 @@
 package com.digis01.IHernandezProgramacionNCapas.DAO;
 
+import com.digis01.IHernandezProgramacionNCapas.JPA.Colonia;
 import com.digis01.IHernandezProgramacionNCapas.JPA.Direccion;
 import com.digis01.IHernandezProgramacionNCapas.ML.Result;
 import com.digis01.IHernandezProgramacionNCapas.JPA.Usuario;
@@ -119,12 +120,11 @@ public class UsuarioJPADAOImplementation implements IUsuarioJPADAO
         
         try 
         {
-            Usuario usuarioJPA = new Usuario(usuarioML);
             Usuario usuarioBD = entityManager.find(Usuario.class, usuarioML.getIdUsuario());
-            
+            Usuario usuarioJPA = new Usuario(usuarioML);
             usuarioJPA.Direcciones = usuarioBD.Direcciones;
-            
             entityManager.merge(usuarioJPA);
+            
             result.correct = true;
             
         } catch (Exception ex) 
@@ -132,8 +132,7 @@ public class UsuarioJPADAOImplementation implements IUsuarioJPADAO
             result.correct = false;
             result.errorMessage = ex.getLocalizedMessage();
             result.ex = ex;
-        }
-        
+        }       
         return result;
     }
 }

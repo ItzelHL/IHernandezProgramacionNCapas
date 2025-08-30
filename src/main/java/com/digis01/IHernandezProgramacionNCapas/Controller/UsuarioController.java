@@ -2,6 +2,7 @@ package com.digis01.IHernandezProgramacionNCapas.Controller;
 
 import com.digis01.IHernandezProgramacionNCapas.DAO.ColoniaDAOImplementation;
 import com.digis01.IHernandezProgramacionNCapas.DAO.ColoniaJPADAOImplementation;
+import com.digis01.IHernandezProgramacionNCapas.DAO.DireccionJPADAOImplementation;
 import com.digis01.IHernandezProgramacionNCapas.DAO.EstadoDAOImplementation;
 import com.digis01.IHernandezProgramacionNCapas.DAO.EstadoJPADAOImplementation;
 import com.digis01.IHernandezProgramacionNCapas.DAO.MunicipioDAOImplementation;
@@ -71,6 +72,8 @@ public class UsuarioController {
     @Autowired
     private RolJPADAOImplementation rolJPADAOImplementation;
     @Autowired
+    private DireccionJPADAOImplementation direccionJPADAOImplementation;
+    @Autowired
     private PaisJPADAOImplementation paisJPADAOImplementation;
     @Autowired
     private EstadoJPADAOImplementation estadoJPADAOImplementation;
@@ -135,11 +138,52 @@ public class UsuarioController {
         }
     }
 
-//    AGREGA USUARIO Y DIRECCION, EDITAR USUARIO, AGREGAR DIRECCION, EDITAR DIRECCION
+//   VISTA QUE MUESTRA EL UsuarioForm SEGÚN EL CRUD (EDITAR USUARIO, AGREGAR DIRECCION, EDITAR DIRECCION)
+//    UsuarioGetById, DireccionAdd, DireccionUpdate
+    @GetMapping("formEditable") // localhost:8080/usuario/formEditable
+    public String FormEditable(@RequestParam int IdUsuario,
+                                                @RequestParam(required = false) Integer IdDireccion,
+                                                Model model) {
+        if (IdDireccion == null) // Vista para editar usuario // IdUsuario > 0 && IdDireccion == -1
+        {
+            Result result = usuarioJPADAOImplementation.GetById(IdUsuario);
+            Usuario usuario = (Usuario) result.object;
+            usuario.Direccion = new ArrayList<>();
+            usuario.Direccion.add(new Direccion(-1));
+
+            model.addAttribute("paises", paisJPADAOImplementation.GetAllPais().objects);
+            model.addAttribute("roles", rolJPADAOImplementation.GetAll().objects);
+            model.addAttribute("usuario", usuario);
+
+            return "UsuarioForm";
+        } else if (IdDireccion == 0) // Vista para agregar dirección // IdUsuario > 0 && IdDireccion == 0
+        {
+            Result result = direccionJPADAOImplementation.AddDireccion(IdUsuario);
+            if (result.correct && result.object != null) {
+                Usuario usuario = (Usuario) result.object;
+                if (usuario.getDireccion() == null) {
+                    usuario.setDireccion(new ArrayList<>());
+                    usuario.Direccion.add(new Direccion(0));
+                }
+                model.addAttribute("paises", paisJPADAOImplementation.GetAllPais().objects);
+                model.addAttribute("roles", rolJPADAOImplementation.GetAll().objects);
+                model.addAttribute("usuario", usuario);
+            }
+            return "UsuarioForm";
+        } else if (IdDireccion > 0) // Editar direccion // IdUsuario > 0 && IdDireccion > 0
+        {
+            Result result = usuarioJPADAOImplementation.GetById(IdDireccion);
+            model.addAttribute("paises", paisJPADAOImplementation.GetAllPais().objects);
+           // model.addAttribute("usuario", usuarioJPADAOImplementation.Add(IdUsuario));
+        }
+        return "redirect:/usuario";
+    }
+
+    //    AGREGA USUARIO Y DIRECCION, EDITAR USUARIO, AGREGAR DIRECCION, EDITAR DIRECCION
 //    IdUsuario == 0 && IdDireccion == 0  
 //    UsuarioDireccionAdd, UsuarioUpdate, DireccionAdd, DireccionUpdate
     @PostMapping("add") // localhost:8080/usuario/add   
-    public String Add(@Valid @ModelAttribute("usuario") Usuario usuario, BindingResult bindingResult, Model model,
+    public String Add(@Valid @ModelAttribute("usuario") Usuario usuario,BindingResult bindingResult, Model model,
             @RequestParam("imagenFile") MultipartFile imagen) {    
         if (bindingResult.hasErrors())
         {
@@ -191,6 +235,7 @@ public class UsuarioController {
                     }
                 }
                 Result result = usuarioJPADAOImplementation.Update(usuario);
+                
                 model.addAttribute("paises", paisJPADAOImplementation.GetAllPais().objects);
                 model.addAttribute("roles", rolJPADAOImplementation.GetAll().objects);
                 return "redirect:/usuario";
@@ -198,7 +243,10 @@ public class UsuarioController {
             }
             else if (usuario.getIdUsuario() > 0 && usuario.Direccion.get(0).getIdDireccion() == 0) // Agregar dirección
             {
-                
+                Result result = direccionJPADAOImplementation.AddDireccion(usuario.getIdUsuario());
+                model.addAttribute("paises", paisJPADAOImplementation.GetAllPais().objects);
+                model.addAttribute("roles", rolJPADAOImplementation.GetAll().objects);
+                return "redirect:/usuario";
             }
             else if (usuario.getIdUsuario() > 0 && usuario.Direccion.get(0).getIdDireccion() > 0) // Editar dirección
             {
@@ -208,49 +256,17 @@ public class UsuarioController {
         return "UsuarioIndex";
     }
 
-//   VISTA QUE MUESTRA EL UsuarioForm SEGÚN EL CRUD (EDITAR USUARIO, AGREGAR DIRECCION, EDITAR DIRECCION)
-//    UsuarioGetById, DireccionAdd, DireccionUpdate
-    @GetMapping("formEditable") // localhost:8080/usuario/formEditable
-    public String FormEditable(@RequestParam int IdUsuario,
-                                                @RequestParam(required = false) Integer IdDireccion,
-                                                Model model) {
-        if (IdDireccion == null) // Editar usuario // IdUsuario > 0 && IdDireccion == -1
-        {
-            Result result = usuarioJPADAOImplementation.GetById(IdUsuario);
-            Usuario usuario = (Usuario) result.object;
-            usuario.Direccion.add(new Direccion(-1));
-
-            model.addAttribute("paises", paisJPADAOImplementation.GetAllPais().objects);
-            model.addAttribute("roles", rolJPADAOImplementation.GetAll().objects);
-            model.addAttribute("usuario", usuario);
-
-            return "UsuarioForm";
-        } else if (IdDireccion == 0) // Agregar dirección // IdUsuario > 0 && IdDireccion == 0
-        {
-            Result result = usuarioDAOImplementation.AddDireccion(IdUsuario);
-            if (result.correct && result.object != null) {
-                Usuario usuario = (Usuario) result.object;
-                if (usuario.getDireccion() == null) {
-                    usuario.setDireccion(new ArrayList<>());
-                    usuario.Direccion.add(new Direccion());
-                }
-                model.addAttribute("paises", paisJPADAOImplementation.GetAllPais().objects);
-                model.addAttribute("roles", rolJPADAOImplementation.GetAll().objects);
-                model.addAttribute("usuario", usuarioDAOImplementation.AddDireccion(IdUsuario));
-            }
-            return "UsuarioForm";
-        } else if (IdDireccion > 0) // Editar direccion // IdUsuario > 0 && IdDireccion > 0
-        {
-
-        }
-        return "redirect:/usuario";
-    }
-
-
 //    VISTA Y MÉTODO PARA RETORNAR LUEGO DE ELIMINAR UN USUARIO
     @GetMapping("delete/{IdUsuario}")
     public String Delete(@PathVariable("IdUsuario") int IdUsuario) {
         Result result = usuarioJPADAOImplementation.Delete(IdUsuario);
+        return "redirect:/usuario";
+    }
+    
+//    VISTA Y MÉTODO PARA RETORNAR LUEGO DE ELIMINAR LA DIRECCIÓN DE UN USUARIO
+    @GetMapping("deleteD/{IdDireccion}")
+    public String DeleteDireccion(@PathVariable("IdDireccion") int IdDireccion){
+        Result result = direccionJPADAOImplementation.Delete(IdDireccion);
         return "redirect:/usuario";
     }
 

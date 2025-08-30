@@ -58,6 +58,14 @@ public class Direccion
         this.Colonia = colonia;
         this.Usuario = usuario;
     }
+    
+    public Direccion(com.digis01.IHernandezProgramacionNCapas.ML.Direccion direccionML)
+    {
+        this.IdDireccion = direccionML.getIdDireccion();
+        this.Calle = direccionML.getCalle();
+        this.NumeroExterior = direccionML.getNumeroExterior();
+        this.NumeroInterior = direccionML.getNumeroInterior();
+    }
 
     public void setIdDireccion(int idDireccion) 
     {
