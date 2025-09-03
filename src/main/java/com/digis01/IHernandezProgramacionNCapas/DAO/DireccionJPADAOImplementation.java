@@ -5,7 +5,6 @@ import com.digis01.IHernandezProgramacionNCapas.JPA.Usuario;
 import com.digis01.IHernandezProgramacionNCapas.ML.Result;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -16,8 +15,9 @@ public class DireccionJPADAOImplementation implements IDireccionJPADAO
     @Autowired
         private EntityManager entityManager;
     
+    @Transactional
     @Override
-    public Result AddDireccion(int IdUsuario)
+    public Result AddDireccion(int IdDireccion)
     {
         Result result = new Result();
         
@@ -31,8 +31,31 @@ public class DireccionJPADAOImplementation implements IDireccionJPADAO
             
             List<Direccion> direccionJPA = usuarioJPA.Direcciones;
 //            usuarioJPA.Direcciones = new Direccion(direccionML);
-            
+
+            result.correct = true;
         } catch (Exception ex) {
+            result.correct = false;
+            result.errorMessage = ex.getLocalizedMessage();
+            result.ex = ex;
+        }
+        
+        return result;
+    }
+    
+    @Transactional
+    @Override
+    public Result UpdateDireccion(com.digis01.IHernandezProgramacionNCapas.ML.Usuario usuarioML) 
+    {
+        Result result = new Result();
+        
+        try 
+        {
+            Direccion direccionJPA = new Direccion(usuarioML);
+            entityManager.merge(direccionJPA);
+            
+            result.correct = true;
+        } catch (Exception ex) 
+        {
             result.correct = false;
             result.errorMessage = ex.getLocalizedMessage();
             result.ex = ex;

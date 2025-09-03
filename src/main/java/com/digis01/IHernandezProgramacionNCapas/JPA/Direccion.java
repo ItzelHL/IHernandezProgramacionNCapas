@@ -66,6 +66,21 @@ public class Direccion
         this.NumeroExterior = direccionML.getNumeroExterior();
         this.NumeroInterior = direccionML.getNumeroInterior();
     }
+    
+    public Direccion(com.digis01.IHernandezProgramacionNCapas.ML.Usuario usuarioML)
+    {
+//        alumnoML.Direcciones.get(0) -> Direccion ML
+        com.digis01.IHernandezProgramacionNCapas.ML.Direccion direccionML = usuarioML.Direccion.get(0);
+        
+        this.IdDireccion = direccionML.getIdDireccion();
+        this.Calle = direccionML.getCalle();
+        this.NumeroInterior = direccionML.getNumeroInterior();
+        this.NumeroExterior = direccionML.getNumeroExterior();
+        this.Colonia = new Colonia();
+        this.Colonia.setIdColonia(direccionML.Colonia.getIdColonia());
+        this.Usuario = new Usuario();
+        this.Usuario.setIdUsuario(usuarioML.getIdUsuario());
+    }
 
     public void setIdDireccion(int idDireccion) 
     {

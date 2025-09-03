@@ -93,7 +93,7 @@
                             <tbody>
                                 <tr th:each="direccion, iterStat : ${usuario.direccion}">
                                     <td id="botonesTabla">
-                                        <a th:href="@{/usuario/add}" class="btn btn-success"><i class="bi bi-pencil-square"></i></a>
+                                        <a th:href="@{/usuario/update/{idDireccion}(idDireccion = ${direccion.IdDireccion})}" class="btn btn-success"><i class="bi bi-pencil-square"></i></a>
                                         <a th:href="@{/usuario/deleteD/{idDireccion}(idDireccion = ${direccion.IdDireccion})}" class="btn btn-danger"><i class="bi bi-trash3-fill"></i></a>
                                     </td>
                                     <td th:text="${direccion.Calle}"></td>

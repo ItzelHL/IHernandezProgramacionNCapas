@@ -86,15 +86,18 @@ public class UsuarioController {
 //    VISTA PARA INDEX 
 //    UsuarioDireccionGetAll
     @GetMapping // localhost:8080/usuario
-    public String Index(Model model) {
+    public String Index(Model model) 
+    {
         Result result = usuarioJPADAOImplementation.GetAll();
 
         model.addAttribute("usuarioBusqueda", new Usuario());
         model.addAttribute("roles", rolJPADAOImplementation.GetAll().objects);
 
-        if (result.correct) {
+        if (result.correct) 
+        {
             model.addAttribute("usuarios", result.objects);
-        } else {
+        } else 
+        {
             model.addAttribute("usuarios", null);
         }
         return "UsuarioIndex";
@@ -112,7 +115,7 @@ public class UsuarioController {
     }
 
 //    VISTA QUE MUESTRA UsuarioDetail (si el usuario existe) o UsuarioForm (si el usuario no existe) 
-//    UsuarioGetById y DireccionesByIdUsuario
+//    UsuarioGetById
     @GetMapping("/action/{IdUsuario}") // localhost:8080/usuario/action/{idUsuario}
     public String Add(Model model, @PathVariable("IdUsuario") int IdUsuario) {
         if (IdUsuario == 0) //usuario no existe - Muestra el UsuarioForm.html
@@ -138,8 +141,8 @@ public class UsuarioController {
         }
     }
 
-//   VISTA QUE MUESTRA EL UsuarioForm SEGÚN EL CRUD (EDITAR USUARIO, AGREGAR DIRECCION, EDITAR DIRECCION)
-//    UsuarioGetById, DireccionAdd, DireccionUpdate
+//   VISTA QUE MUESTRA EL UsuarioForm PARA EDITAR USUARIO Y AGREGAR DIRECCION
+//    UsuarioGetById, DireccionAdd
     @GetMapping("formEditable") // localhost:8080/usuario/formEditable
     public String FormEditable(@RequestParam int IdUsuario,
                                                 @RequestParam(required = false) Integer IdDireccion,
@@ -159,9 +162,11 @@ public class UsuarioController {
         } else if (IdDireccion == 0) // Vista para agregar dirección // IdUsuario > 0 && IdDireccion == 0
         {
             Result result = direccionJPADAOImplementation.AddDireccion(IdUsuario);
-            if (result.correct && result.object != null) {
+            if (result.correct && result.object != null) 
+            {
                 Usuario usuario = (Usuario) result.object;
-                if (usuario.getDireccion() == null) {
+                if (usuario.getDireccion() == null) 
+                {
                     usuario.setDireccion(new ArrayList<>());
                     usuario.Direccion.add(new Direccion(0));
                 }
@@ -170,12 +175,15 @@ public class UsuarioController {
                 model.addAttribute("usuario", usuario);
             }
             return "UsuarioForm";
-        } else if (IdDireccion > 0) // Editar direccion // IdUsuario > 0 && IdDireccion > 0
-        {
-            Result result = usuarioJPADAOImplementation.GetById(IdDireccion);
-            model.addAttribute("paises", paisJPADAOImplementation.GetAllPais().objects);
-           // model.addAttribute("usuario", usuarioJPADAOImplementation.Add(IdUsuario));
-        }
+        } //else if (IdDireccion > 0) // Editar direccion // IdUsuario > 0 && IdDireccion > 0
+//        {
+////            Result result = direccionJPADAOImplementation.UpdateDireccion(IdDireccion);
+////            Usuario usuario = (Usuario) result.object;
+//            model.addAttribute("paises", paisJPADAOImplementation.GetAllPais().objects);
+//            model.addAttribute("roles", rolJPADAOImplementation.GetAll().objects);
+////            model.addAttribute("usuario", usuario);
+//           return "UsuarioForm";
+//        }
         return "redirect:/usuario";
     }
 
@@ -250,10 +258,28 @@ public class UsuarioController {
             }
             else if (usuario.getIdUsuario() > 0 && usuario.Direccion.get(0).getIdDireccion() > 0) // Editar dirección
             {
-                
+                Result result = direccionJPADAOImplementation.UpdateDireccion(usuario);
+                model.addAttribute("paises", paisJPADAOImplementation.GetAllPais().objects);
+                model.addAttribute("roles", rolJPADAOImplementation.GetAll().objects);
+                return "redirect:/usuario";
             }
         }
         return "UsuarioIndex";
+    }
+    
+//    VISTA PARA EDITAR DIRECCION
+//    IdUsuario > 0 && IdDireccion > 0
+//    DireccionUpdate
+    @GetMapping("update/{IdDireccion}") 
+    public String Update(@PathVariable("IdDireccion") int IdDireccion, Model model){
+        if (IdDireccion > 0) // direccion existe - Muestra el UsuarioForm.html
+        {
+            model.addAttribute("paises", paisJPADAOImplementation.GetAllPais().objects);
+            model.addAttribute("roles", rolJPADAOImplementation.GetAll().objects);
+            Direccion direccion = new Direccion();
+            model.addAttribute("direccion", direccion);
+        }
+        return "UsuarioForm";
     }
 
 //    VISTA Y MÉTODO PARA RETORNAR LUEGO DE ELIMINAR UN USUARIO
