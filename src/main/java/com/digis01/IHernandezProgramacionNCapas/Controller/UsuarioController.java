@@ -274,10 +274,10 @@ public class UsuarioController {
     public String Update(@PathVariable("IdDireccion") int IdDireccion, Model model){
         if (IdDireccion > 0) // direccion existe - Muestra el UsuarioForm.html
         {
-            model.addAttribute("paises", paisJPADAOImplementation.GetAllPais().objects);
-            model.addAttribute("roles", rolJPADAOImplementation.GetAll().objects);
-            Direccion direccion = new Direccion();
-            model.addAttribute("direccion", direccion);
+//            model.addAttribute("paises", paisJPADAOImplementation.GetAllPais().objects);
+//            model.addAttribute("roles", rolJPADAOImplementation.GetAll().objects);
+//            Direccion direccion = new Direccion();
+//            model.addAttribute("direccion", direccion);
         }
         return "UsuarioForm";
     }
