@@ -1,30 +1,40 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf-org/extras/spring-security"
       layout:decorate="~{layout}">
 
-    <body layout:fragment="body" style="background-color: #181818;">
-        <div class = "container" style="font-family: Tahoma, sans-serif; ">
-            <div style="">
+    <section layout:fragment="body" style="background-color: #2B3035;">
+        <div class="container">
+            <div>
+                <!-- Formulario para búsqueda abierta -->
                 <form id="filterForm" method="post" th:action="@{/usuario}"  th:object="${usuarioBusqueda}" style="padding-top: 10px;">
                     <div class="row gx-2 gx-md-3 mb-7">
+                        
+                        <!-- Área de búsqueda por nombre -->
                         <div class= "col-md-2 mb-2 mb-md-0">
                             <div class="input-group input-group-merge">
                                 <span class="input-group-prepend input-group-text"><i class="bi bi-person"></i></span>
                                 <input type="text" class="form-control form-control-md" id="filtroNombreUsuario" placeholder="Nombre usuario" th:field="*{Nombre}">
                             </div>
                         </div>
+                        
+                        <!-- Área de búsqueda por apellido paterno -->
                         <div class="col-md-3 mb-3 mb-md-0">
                             <div class="input-group input-group-merge">
                                 <span class="input-group-prepend input-group-text"><i class="bi bi-person"></i></span>
                                 <input type="text" class="form-control form-control-md" id="filtroApellidoPaterno" placeholder="Apellido paterno" th:field="*{ApellidoPaterno}">
                             </div>
                         </div>
+                        
+                        <!-- Área de búsqueda por apellido materno -->
                         <div class="col-md-3 mb-3 mb-md-0">
                             <div class="input-group input-group-merge">
                                 <span class="input-group-prepend input-group-text"><i class="bi bi-person"></i></i></span>
                                 <input type="text" class="form-control form-control-md" id="filtroApellidoMaterno" placeholder="Apellido materno" th:field="*{ApellidoMaterno}">
                             </div>
                         </div>
+                        
+                        <!-- Área de búsqueda por arol -->
                         <div class="col-md-2 mb-2 mb-md-0">
                             <div class="input-group input-group-merge">
                                 <span class="input-group-prepend input-group-text"><i class="bi bi-person-rolodex"></i></span>
@@ -34,15 +44,22 @@
                                 </select>
                             </div>
                         </div>
+                        
+                        <!-- Botón búsqueda -->
                         <div class="col-md-2 mb-2 mb-md-0">
                             <button type="submit" class="btn btn-primary btn-md" id="botonEdit"><i class="bi-search"></i> Buscar</button>
                         </div>
+                        
                     </div>
-                </form>
+                </form>  
             </div>
+            
+            <!-- Agregar usuario -->
             <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4" style="align-items: center; padding-bottom: 10px">
-                <a th:href="@{/usuario/action/{IdUsuario}(IdUsuario=0)}" class="btn btn-success btn-lg" style="justify-content: center; align-items: center">Agregar usuario <i class="bi bi-person-add"></i></a>
+                <a sec:authorize="hasAnyRole('ADMIN')" th:href="@{/usuario/action/{IdUsuario}(IdUsuario=0)}" class="btn btn-success btn-lg" style="justify-content: center; align-items: center">Agregar usuario <i class="bi bi-person-add"></i></a>
             </div>
+            
+            <!-- Tabla de usuarios -->
             <table class = "table table-hover table-striped-columns" style="overflow-x: auto"> 
                 <thead>
                     <tr class = "table table-dark" style="text-align: center">
@@ -58,16 +75,25 @@
                 </thead>
                 <tbody>
                     <tr th:each="usuario : ${usuarios}">
+                        
+                        <!-- Botones UsuarioDetail / Eliminar -->
                         <td>
                             <a th:href="@{/usuario/action/{idUsuario}(idUsuario = ${usuario.IdUsuario})}" class="btn btn-success"><i class="bi bi-pencil-square"></i></a>
                             <a th:href="@{/usuario/delete/{idUsuario}(idUsuario = ${usuario.IdUsuario})}" class="btn btn-danger"><i class="bi bi-trash3-fill"></i></a>
                         </td>
+                        
+                        <!-- Imagen de usuario -->
                         <td>
-                            <!--                            <span th:text="|${(usuario.Imagen != null) ? 'Tengo imagen' : 'No tengo imagen'}|"></span>-->
                             <img id="imagenUsuario" style="max-height: 80px; max-width: auto" th:src="|${(usuario.Imagen != null) ? 'data:image/*;base64,' + usuario.Imagen : 'https://tlconnect.teamlease.com/Images/Profile/default.jpg'}|"/>
                         </td>
+                        
+                        <!-- Username -->
                         <td th:text ="${usuario.Username}"></td>
+                        
+                        <!-- Nombre completo -->
                         <td th:text="|${usuario.Nombre} ${usuario.ApellidoPaterno} ${usuario.ApellidoMaterno}|"></td>
+                        
+                        <!-- Datos personales -->
                         <td>
                             <ol>
                                 <li th:text="${usuario.FechaNacimiento}"></li>
@@ -75,6 +101,8 @@
                                 <li th:text="${usuario.Curp}"></li>
                             </ol>
                         </td>
+                        
+                        <!-- Datos de contacto -->
                         <td>
                             <ol>
                                 <li th:text="${usuario.Email}"></li>
@@ -82,7 +110,11 @@
                                 <li th:text="${usuario.Celular}"></li>
                             </ol>
                         </td>
+                        
+                        <!-- Rol -->
                         <td th:each="rol : ${usuario.Rol}" th:text ="${rol.Nombre}"></td>
+                        
+                        <!-- Direcciones -->
                         <td>
                             <ul>
                                 <li th:each=" direccion : ${usuario.Direccion}" th:text="|${direccion.calle}, ${direccion.NumeroExterior}, ${direccion.NumeroInterior},
@@ -92,6 +124,7 @@
                         </td>
                     </tr>
                 </tbody>
+            </table>
         </div>
-    </body>
+    </section>
 </html>
