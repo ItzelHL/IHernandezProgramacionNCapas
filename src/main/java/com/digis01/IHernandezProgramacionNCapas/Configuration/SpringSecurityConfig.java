@@ -17,12 +17,13 @@ public class SpringSecurityConfig
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception
     {
         http.authorizeHttpRequests(configurer -> configurer
-                                                      .requestMatchers("/login")
+                                                      .requestMatchers("/login", "/css/**", "/js/**", "/images/**")
                                                       .permitAll()
+                                                      .requestMatchers("/usuario/cargamasiva/**")
+                                                      .hasRole("ADMIN")
                                                       .requestMatchers("/usuario/**")
-                                                      .hasAnyRole("ADMIN", "USER", "STAFF")
-                                                      .anyRequest()
-                                                      .authenticated())
+                                                      .hasAnyRole("ADMIN", "STAFF", "USER", "GUEST")
+                                                      .anyRequest().authenticated())
                                                       .formLogin(form -> form
                                                               .loginPage("/login")
                                                               .defaultSuccessUrl("/usuario", true)
@@ -32,17 +33,22 @@ public class SpringSecurityConfig
                                                               .logoutSuccessUrl("/login?logout=true")
                                                               .invalidateHttpSession(true)
                                                               .deleteCookies("JSESSIONID")
-                                                              .permitAll());
+                                                              .permitAll())
+                                                      .exceptionHandling(exception -> exception
+                                                                .accessDeniedPage("/error/403"));
         return http.build();
     }
     
     @Bean
     public InMemoryUserDetailsManager inMemoryUserDetailsManager()
     {
-        UserDetails user = User.builder().username("user").password("{noop}password").roles("USER").build();
         UserDetails userA = User.builder().username("admin").password("{noop}password").roles("ADMIN").build();
-        UserDetails userB = User.builder().username("staff").password("{noop}password").roles("STAFF").build();
+        UserDetails userS = User.builder().username("staff").password("{noop}password").roles("STAFF").build();
+        UserDetails user = User.builder().username("user").password("{noop}password").roles("USER").build();
+        UserDetails userG = User.builder().username("guest").password("{noop}password").roles("GUEST").build();
         
-        return new InMemoryUserDetailsManager(user, userA, userB);
+        
+        
+        return new InMemoryUserDetailsManager(userA, userS, user, userG);
     }
 }

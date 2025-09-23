@@ -38,6 +38,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -321,14 +322,15 @@ public class UsuarioController {
     }
 
 //    <-------------------------------------------------------- C A R G A   M A S I V A -------------------------------------------------------->
+
 //    VISTA PARA LA CARGA MASIVA
-    @GetMapping("cargaMasiva") // localhost:8080/usuario/cargaMasiva
+    @GetMapping("cargamasiva") // localhost:8080/usuario/cargaMasiva
     public String CargaMasiva() {
         return "CargaMasiva";
     }
 
 //    NOMBRA EL ARCHIVO COMO ÚNICO, LO GUARDA Y VALIDA QUE SEA EXCEL O TXT
-    @PostMapping("cargaMasiva") // localhost:8080/usuario/cargaMasiva
+    @PostMapping("cargamasiva") // localhost:8080/usuario/cargaMasiva
     public String CargaMasiva(@RequestParam("archivo") MultipartFile file, Model model, HttpSession session) {
         String root = System.getProperty("user.dir");
         String rutaArchivo = "/src/main/resources/archivos/";
@@ -372,7 +374,7 @@ public class UsuarioController {
     }
 
 //    MUESTRA LA VISTA PARA PROCESAR EL ARCHIVO UNA VEZ QUE VALIDÓ QUE EL TIPO DE ARCHIVO ERA CORRECTO
-    @GetMapping("cargaMasiva/procesar") // localhost:8080/usuario/cargaMasiva/procesar
+    @GetMapping("cargamasiva/procesar") // localhost:8080/usuario/cargaMasiva/procesar
     public String CargaMasiva(HttpSession session) {
         try {
             String ruta = session.getAttribute("path").toString();
