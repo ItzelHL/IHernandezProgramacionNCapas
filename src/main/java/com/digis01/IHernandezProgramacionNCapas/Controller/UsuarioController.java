@@ -19,6 +19,7 @@ import com.digis01.IHernandezProgramacionNCapas.ML.ErrorCM;
 import com.digis01.IHernandezProgramacionNCapas.ML.Result;
 import com.digis01.IHernandezProgramacionNCapas.ML.Rol;
 import com.digis01.IHernandezProgramacionNCapas.ML.Usuario;
+import com.digis01.IHernandezProgramacionNCapas.Service.UsuarioService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import java.io.BufferedReader;
@@ -38,14 +39,18 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -82,6 +87,8 @@ public class UsuarioController {
     private MunicipioJPADAOImplementation municipioJPADAOImplementation;
     @Autowired
     private ColoniaJPADAOImplementation coloniaJPADAOImplementation;
+    @Autowired
+    private UsuarioService usuarioService;
 
 //    <---------------------------------------------- F O R M U L A R I O S   P A R A   U S U A R I O ---------------------------------------------->
 //    VISTA PARA INDEX 
@@ -282,6 +289,16 @@ public class UsuarioController {
         }
         return "UsuarioForm";
     }
+    
+    // ACTUALIZA EL PASSWORD (HASEO)
+    // SOLO EL ADMINISTRADOR PUEDE ACCEDER A ÉL
+    @PostMapping("updatePassword")
+    @PreAuthorize("hasRole('Administrador')")
+     public String updatePasswords() 
+     {
+        Result result = usuarioService.UpdatePassword();
+        return "redirect:/usuario";
+    }
 
 //    VISTA Y MÉTODO PARA RETORNAR LUEGO DE ELIMINAR UN USUARIO
     @GetMapping("delete/{IdUsuario}")
@@ -321,6 +338,15 @@ public class UsuarioController {
         return coloniaJPADAOImplementation.ColoniaByMunicipioGetAll(idMunicipio);
     }
 
+    @PatchMapping("status/{IdUsuario}")
+    public ResponseEntity Status(@PathVariable("IdUsuario") int IdUsuario, @RequestBody com.digis01.IHernandezProgramacionNCapas.JPA.Usuario usuario)
+    {
+        usuario.setIdUsuario(IdUsuario);
+        Result result = usuarioJPADAOImplementation.UpdateStatus(usuario);  
+        
+        return ResponseEntity.status(200).body(result);
+    }
+    
 //    <-------------------------------------------------------- C A R G A   M A S I V A -------------------------------------------------------->
 
 //    VISTA PARA LA CARGA MASIVA

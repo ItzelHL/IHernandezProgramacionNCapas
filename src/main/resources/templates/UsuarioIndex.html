@@ -49,35 +49,49 @@
                         <div class="col-md-2 mb-2 mb-md-0">
                             <button type="submit" class="btn btn-primary btn-md" id="botonEdit"><i class="bi-search"></i> Buscar</button>
                         </div>
-                        
                     </div>
                 </form>  
             </div>
             
+            <!-- Actualizar contraseñas -->
+            <form th:action="@{/usuario/updatePassword}" method="post">
+                <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4" style="align-items: center;">
+                    <button sec:authorize="hasAnyRole('Administrador')" type="submit"class="btn btn-success btn-lg" style="justify-content: center; align-items: center; padding-top: 15px"> Hashear contraseñas</button>
+                </div>
+            </form>
+            
             <!-- Agregar usuario -->
             <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4" style="align-items: center; padding-bottom: 10px">
-                <a sec:authorize="hasAnyRole('ADMIN')" th:href="@{/usuario/action/{IdUsuario}(IdUsuario=0)}" class="btn btn-success btn-lg" style="justify-content: center; align-items: center">Agregar usuario <i class="bi bi-person-add"></i></a>
+                <a sec:authorize="hasAnyRole('Administrador')" th:href="@{/usuario/action/{IdUsuario}(IdUsuario=0)}" class="btn btn-success btn-lg" style="justify-content: center; align-items: center">Agregar usuario <i class="bi bi-person-add"></i></a>
             </div>
             
             <!-- Tabla de usuarios -->
             <table class = "table table-hover table-striped-columns" style="overflow-x: auto"> 
                 <thead>
                     <tr class = "table table-dark" style="text-align: center">
-                        <th sec:authorize="hasAnyRole('ADMIN')" scope="col-xxl-1 col-xl-1 col-lg-1 col-md-1 col-sm-1 col-1" >#</th>
+                        <th scope="col-xxl-1 col-xl-1 col-lg-1 col-md-1 col-sm-1 col-1" >Status</th>
+                        <th sec:authorize="hasAnyRole('Administrador')" scope="col-xxl-1 col-xl-1 col-lg-1 col-md-1 col-sm-1 col-1" >#</th>
                         <th scope="col-xxl-1 col-xl-1 col-lg-1 col-md-1 col-sm-1 col-1" >Imagen</th>
                         <th scope="col-xxl-1 col-xl-1 col-lg-1 col-md-1 col-sm-1 col-1" >Username</th>
                         <th scope="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2" >Nombre Completo</th>
                         <th scope="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2" >Datos personales</th>
-                        <th scope="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2" >Contacto</th>
+                        <th scope="col-xxl-1 col-xl-1 col-lg-1 col-md-1 col-sm-1 col-1" >Contacto</th>
                         <th scope="col-xxl-1 col-xl-1 col-lg-1 col-md-1 col-sm-1 col-1" >Rol</th>
                         <th scope="col-xxl-2 col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2">Direccion</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr th:each="usuario : ${usuarios}">
+                        <!-- Status -->
+                        <td>
+                            <label class="switch">
+                                <input type="checkbox" class="toggleStatus" th:attr="data-idusuario=${usuario.IdUsuario}" th:checked="${usuario.Status == 1}">
+                                <span class="slider round"></span>
+                            </label>
+                        </td>
                         
                         <!-- Botones UsuarioDetail / Eliminar -->
-                        <td sec:authorize="hasAnyRole('ADMIN')">
+                        <td sec:authorize="hasAnyRole('Administrador')">
                             <a th:href="@{/usuario/action/{idUsuario}(idUsuario = ${usuario.IdUsuario})}" class="btn btn-success"><i class="bi bi-pencil-square"></i></a>
                             <a th:href="@{/usuario/delete/{idUsuario}(idUsuario = ${usuario.IdUsuario})}" class="btn btn-danger"><i class="bi bi-trash3-fill"></i></a>
                         </td>
@@ -126,5 +140,32 @@
                 </tbody>
             </table>
         </div>
+        <script>
+            $(document).on("change", ".toggleStatus", function () {
+                let checkbox = $(this);
+                let idUsuario = checkbox.data("idusuario");
+                let nuevoStatus = checkbox.is(":checked") ? 1 : 0;
+                console.log("idUsuario = ", idUsuario, "nuevoStatus = ", nuevoStatus);
+
+                $.ajax({
+                    type: 'PATCH',
+                    url: "/usuario/status/" + idUsuario,
+                    data: JSON.stringify({status: nuevoStatus}),
+                    contentType: "application/json",
+                    success: function (response)
+                    {
+                        console.log("Estado actualizado: ", response);
+                    },
+                    error: function (xhr, status, error)
+                    {
+                        console.error("Error al actualizar estado: ", error);
+                        console.log("Detalle: ", xhr.responseText);
+
+                        checkbox.prop("checked", !checkbox.is(":checked"));
+                        alert("No se pudo actualizar el estado.");
+                    }
+                });
+            });
+        </script>
     </section>
 </html>

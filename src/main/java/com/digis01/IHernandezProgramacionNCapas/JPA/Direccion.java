@@ -1,5 +1,6 @@
 package com.digis01.IHernandezProgramacionNCapas.JPA;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -32,6 +33,7 @@ public class Direccion
     
     @ManyToOne
     @JoinColumn(name = "idusuario", nullable = false)
+    @JsonBackReference
     public Usuario Usuario;
 
     public Direccion(){}

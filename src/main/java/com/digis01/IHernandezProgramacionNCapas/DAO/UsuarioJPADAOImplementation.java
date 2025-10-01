@@ -1,7 +1,5 @@
 package com.digis01.IHernandezProgramacionNCapas.DAO;
 
-import com.digis01.IHernandezProgramacionNCapas.JPA.Colonia;
-import com.digis01.IHernandezProgramacionNCapas.JPA.Direccion;
 import com.digis01.IHernandezProgramacionNCapas.ML.Result;
 import com.digis01.IHernandezProgramacionNCapas.JPA.Usuario;
 import jakarta.persistence.EntityManager;
@@ -133,6 +131,38 @@ public class UsuarioJPADAOImplementation implements IUsuarioJPADAO
             result.errorMessage = ex.getLocalizedMessage();
             result.ex = ex;
         }       
+        return result;
+    }
+    
+    @Transactional
+    @Override
+    public Result UpdateStatus(Usuario usuario)
+    {
+        Result result = new Result();
+        
+        try 
+        {
+            Usuario usuarioBD = entityManager.find(Usuario.class, usuario.getIdUsuario());
+            
+            if(usuarioBD != null)
+            {
+                usuarioBD.setStatus(usuario.getStatus());
+                entityManager.merge(usuarioBD);
+                
+                result.object = usuarioBD;
+                result.correct = true;
+            } else
+            {
+                result.errorMessage = "Usuario no encontrado, Id incorrecto";
+            }
+            
+        } catch (Exception ex) 
+        {
+            result.correct = false;
+            result.errorMessage = ex.getLocalizedMessage();
+            result.ex = ex;
+        }
+        
         return result;
     }
 }

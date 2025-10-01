@@ -1,5 +1,7 @@
 package com.digis01.IHernandezProgramacionNCapas.JPA;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,6 +19,10 @@ import java.util.List;
 @Entity
 public class Usuario {
 
+    @JsonProperty("status")
+    @Column(name = "status")
+    private int Status;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idusuario")
@@ -27,7 +33,7 @@ public class Usuario {
     private String Imagen;
 
     @Column(name = "username")
-    private String Username;
+    private String username;
 
     @Column(name = "nombre")
     private String Nombre;
@@ -64,15 +70,17 @@ public class Usuario {
     public Rol Rol;
 
     @OneToMany(mappedBy = "Usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     public List<Direccion> Direcciones = new ArrayList<>();
 
     public Usuario() {
     }
 
     public Usuario(com.digis01.IHernandezProgramacionNCapas.ML.Usuario usuarioML) {
+        this.Status = usuarioML.getStatus();
         this.IdUsuario = usuarioML.getIdUsuario();
         this.Imagen = usuarioML.getImagen();
-        this.Username = usuarioML.getUsername();
+        this.username = usuarioML.getUsername();
         this.Nombre = usuarioML.getNombre();
         this.ApellidoPaterno = usuarioML.getApellidoPaterno();
         this.ApellidoMaterno = usuarioML.getApellidoMaterno();
@@ -128,10 +136,13 @@ public class Usuario {
         }
     }
 
-    public Usuario(int idUsuario, String imagen, String username, String nombre, String apellidoPaterno, String apellidoMaterno, Date fechaNacimiento, String sexo, String curp, String email, String password, String telefono, String celular, Rol rol, List<Direccion> direccion) {
+    public Usuario(int status, int idUsuario, String imagen, String username, String nombre, String apellidoPaterno, String apellidoMaterno, 
+            Date fechaNacimiento, String sexo, String curp, String email, String password, String telefono, String celular, List<Direccion> direcciones) 
+    {
+        this.Status = status;
         this.IdUsuario = idUsuario;
         this.Imagen = imagen;
-        this.Username = username;
+        this.username = username;
         this.Nombre = nombre;
         this.ApellidoPaterno = apellidoPaterno;
         this.ApellidoMaterno = apellidoMaterno;
@@ -142,10 +153,18 @@ public class Usuario {
         this.Password = password;
         this.Telefono = telefono;
         this.Celular = celular;
-        this.Rol = rol;
-        this.Direcciones = direccion;
+        this.Direcciones = direcciones;
     }
 
+    public void setStatus(int status) 
+    {
+        this.Status = status;
+    }
+    public int getStatus() 
+    {
+        return Status;
+    }
+    
     public void setIdUsuario(int idUsuario) {
         this.IdUsuario = idUsuario;
     }
@@ -163,11 +182,11 @@ public class Usuario {
     }
 
     public void setUsername(String username) {
-        this.Username = username;
+        this.username = username;
     }
 
     public String getUsername() {
-        return Username;
+        return username;
     }
 
     public void setNombre(String nombre) {

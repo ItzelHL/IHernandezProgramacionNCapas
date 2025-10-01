@@ -1,9 +1,5 @@
 package com.digis01.IHernandezProgramacionNCapas.ML;
 
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +7,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 public class Usuario 
 {
-
+    private int Status;
+    
     private int IdUsuario;
 //    @NotEmpty(message = "El username debe iniciar con 2 mayúsculas")
 //    @Pattern(regexp = "[A-ZñÑ]{2}[a-z?0-9_ñÑ]+", message = "Formato de Username incorrecto")
@@ -76,9 +73,10 @@ public class Usuario
         this.Rol = rol;
     }
 
-    public Usuario(String imagen, int idUsuario, String username, String nombre, String apellidoPaterno, String apellidoMaterno, String email,
+    public Usuario(int status, String imagen, int idUsuario, String username, String nombre, String apellidoPaterno, String apellidoMaterno, String email,
             String password, Date fechaNacimiento, String sexo, String telefono, String celular, String curp) 
     {
+        this.Status = status;
         this.IdUsuario = idUsuario;
         this.Imagen = imagen;
         this.Username = username;
@@ -95,6 +93,7 @@ public class Usuario
     }
 
     public Usuario(com.digis01.IHernandezProgramacionNCapas.JPA.Usuario usuarioJPA) {
+        this.Status = usuarioJPA.getStatus();
         this.IdUsuario = usuarioJPA.getIdUsuario();
         this.Imagen = usuarioJPA.getImagen();
         this.Username = usuarioJPA.getUsername();
@@ -149,6 +148,15 @@ public class Usuario
         }
     }
 
+    public void setStatus(int status) 
+    {
+        this.Status = status;
+    }
+    public int getStatus() 
+    {
+        return Status;
+    }
+    
     public void setIdUsuario(int idUsuario) {
         this.IdUsuario = idUsuario;
     }

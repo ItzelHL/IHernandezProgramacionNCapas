@@ -1,5 +1,6 @@
 package com.digis01.IHernandezProgramacionNCapas.Controller;
 
+import com.digis01.IHernandezProgramacionNCapas.ML.Result;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,9 +14,13 @@ public class LogInController
     @GetMapping
     public String Login(@RequestParam(required = false) String error, @RequestParam(required = false) String logout, Model model)
     {
-        if (error != null) 
+        if("bad_credentials".equals(error))
         {
-            model.addAttribute("error", "Usuario o contraseña incorrectos");
+            model.addAttribute("error", "Usuario o contraseña incorrectos.");
+        }
+        else if (error != null) 
+        {
+            model.addAttribute("error", "Usuario deshabilitado, contacte al administrador.");
         }
         if(logout != null)
         {
