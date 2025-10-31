@@ -304,10 +304,10 @@ public class UsuarioDAOImplementation implements IUsuarioDAO
                         
                         int isCorrect = callableStatement.executeUpdate();
 
-                        if (isCorrect == -1) {
-                            return true;
-                        }
-                        return false;
+//                        if (isCorrect == -1) {
+//                            return true;
+//                        }
+                        return true;
                     });
             
         } catch (Exception ex) {
@@ -320,27 +320,28 @@ public class UsuarioDAOImplementation implements IUsuarioDAO
     }
     
     @Override
-    public Result AddDireccion(int idUsuario)
+    public Result AddDireccion(Usuario usuario)
     {
         Result result = new Result();
         
         try 
         {
             jdbcTemplate.execute("CALL DireccionADDUsuario(?, ?, ?, ?, ?)", (CallableStatementCallback<Boolean>) callableStatement -> {
-                Usuario usuario = new Usuario();
+                
                 callableStatement.setString(1, usuario.Direccion.get(0).getCalle());
                 callableStatement.setString(2, usuario.Direccion.get(0).getNumeroExterior());
                 callableStatement.setString(3, usuario.Direccion.get(0).getNumeroInterior());
+                
                 callableStatement.setInt(4, usuario.Direccion.get(0).Colonia.getIdColonia());
-                callableStatement.setInt(5, idUsuario);
+                callableStatement.setInt(5, usuario.getIdUsuario());
                 
                  int isCorrect = callableStatement.executeUpdate();
 
-                if (isCorrect == -1) 
-                {
-                    return true;
-                }
-                return false;
+//                if (isCorrect == -1) 
+//                {
+//                    return true;
+//                }
+                return true;
             });
             result.correct = true;
         } catch (Exception ex) 
@@ -376,16 +377,15 @@ public class UsuarioDAOImplementation implements IUsuarioDAO
 
                 callableStatement.executeUpdate();
                 return true;
-            });
-            
+            });   
             result.correct = true;
+            
         } catch (Exception ex) 
         {
             result.correct = false;
             result.errorMessage = ex.getLocalizedMessage();
             result.ex = ex;
-        }
-        
+        }      
         return result;
     }
 }
